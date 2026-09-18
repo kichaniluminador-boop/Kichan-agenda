@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kichan Agenda</title><meta name="theme-color" content="#0d0d0e"><link rel="manifest" href="manifest.webmanifest">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0d0d0e;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:520px;margin:auto;padding:18px 12px 40px}h1{color:#d6ad4b;font-size:21px;margin:0}.sub{color:#999;font-size:12px;margin:4px 0 14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.s{background:#19191b;border:1px solid #29292d;border-radius:12px;text-align:center;padding:8px 3px}.s b{display:block;color:#d6ad4b;font-size:18px}.s span{font-size:9px;color:#999}
+.money{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.money .s b{font-size:14px}
+#add{width:100%;margin:12px 0;background:#d6ad4b;color:#111;border:0;border-radius:12px;padding:13px;font-weight:800;font-size:14px}
+.card{background:#19191b;border:1px solid #2c2c30;border-radius:14px;padding:10px;margin:9px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.full{grid-column:1/-1}
+label{display:block;color:#999;font-size:9px;margin:2px 0}input,select{width:100%;background:#101011;color:#fff;border:1px solid #343439;border-radius:9px;padding:9px;min-height:39px;font-size:14px}
+.times{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.del{width:100%;margin-top:8px;border:1px solid #493030;background:#25191a;color:#ff9a9a;border-radius:9px;padding:8px}
+.empty{text-align:center;color:#777;padding:25px 5px;font-size:13px}.note{color:#666;text-align:center;font-size:10px;margin-top:14px}
+</style></head><body><main>
+<h1>KICHAN ILUMINADOR</h1><div class="sub">Agenda personal de prestaciones</div>
+<div class="stats">
+<div class="s"><b id="total">0</b><span>TOTAL</span></div><div class="s"><b id="ok">0</b><span>CONFIRMADAS</span></div><div class="s"><b id="pc">0</b><span>POR CONF.</span></div>
+<div class="s"><b id="rep">0</b><span>REEMPLAZOS</span></div><div class="s"><b id="paid">0</b><span>PAGADAS</span></div><div class="s"><b id="pending">0</b><span>PENDIENTES</span></div>
+</div>
+<div class="money"><div class="s"><b id="mp">$0</b><span>TOTAL PAGADO</span></div><div class="s"><b id="mpe">$0</b><span>POR COBRAR</span></div></div>
+<button type="button" id="add">＋ AGREGAR PRESTACIÓN</button>
+<div id="list"></div><div class="note">Los datos se guardan en este navegador.</div>
+</main>
+<script>
+(function(){
+var jobs=[];
+try{jobs=JSON.parse(localStorage.getItem("kichanJobs2")||"[]")||[]}catch(e){jobs=[]}
+var list=document.getElementById("list");
+function persist(){try{localStorage.setItem("kichanJobs2",JSON.stringify(jobs))}catch(e){}}
+function fmt(n){try{return new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(Number(n)||0)}catch(e){return "$"+(Number(n)||0)}}
+function sum(){
+ document.getElementById("total").textContent=jobs.length;
+ document.getElementById("ok").textContent=jobs.filter(function(x){return x.status==="Confirmado"}).length;
+ document.getElementById("pc").textContent=jobs.filter(function(x){return x.status==="Por confirmar"}).length;
+ document.getElementById("rep").textContent=jobs.filter(function(x){return x.status==="Reemplazo"}).length;
+ document.getElementById("paid").textContent=jobs.filter(function(x){return x.pay==="Pagado"}).length;
+ document.getElementById("pending").textContent=jobs.filter(function(x){return x.pay==="Pendiente"}).length;
+ var a=0,b=0;jobs.forEach(function(x){var v=Number(x.amount)||0;if(x.pay==="Pagado")a+=v;else if(x.pay==="Pendiente")b+=v});
+ document.getElementById("mp").textContent=fmt(a);document.getElementById("mpe").textContent=fmt(b);
+}
+function input(label,type,value,key,i,full){
+ var d=document.createElement("div");if(full)d.className="full";var l=document.createElement("label");l.textContent=label;d.appendChild(l);
+ var el=document.createElement("input");el.type=type;el.value=value||"";el.addEventListener("input",function(){jobs[i][key]=this.value;persist();sum()});d.appendChild(el);return d;
+}
+function select(label,values,value,key,i){
+ var d=document.createElement("div"),l=document.createElement("label");l.textContent=label;d.appendChild(l);var s=document.createElement("select");
+ values.forEach(function(v){var o=document.createElement("option");o.textContent=v;o.value=v;if(v===value)o.selected=true;s.appendChild(o)});
+ s.addEventListener("change",function(){jobs[i][key]=this.value;persist();sum()});d.appendChild(s);return d;
+}
+function draw(){
+ list.innerHTML="";
+ if(!jobs.length){var e=document.createElement("div");e.className="empty";e.textContent="Aún no hay prestaciones. Toca “Agregar prestación”.";list.appendChild(e)}
+ jobs.forEach(function(x,i){
+  var c=document.createElement("div");c.className="card";var g=document.createElement("div");g.className="grid";
+  g.appendChild(input("FECHA","date",x.date,"date",i,false));g.appendChild(input("BANDA / ARTISTA","text",x.band,"band",i,false));
+  g.appendChild(input("LOCALIDAD / LUGAR","text",x.place,"place",i,true));
+  var td=document.createElement("div");td.className="full times";
+  td.appendChild(input("LLEGADA","time",x.arrival,"arrival",i,false));td.appendChild(input("PRUEBA","time",x.test,"test",i,false));td.appendChild(input("SHOW","time",x.show,"show",i,false));g.appendChild(td);
+  g.appendChild(select("ESTADO",["Confirmado","Por confirmar","Reemplazo"],x.status,"status",i));
+  g.appendChild(select("PAGO",["Pagado","Pendiente"],x.pay,"pay",i));
+  g.appendChild(input("MONTO $","number",x.amount,"amount",i,true));c.appendChild(g);
+  var b=document.createElement("button");b.type="button";b.className="del";b.textContent="Eliminar prestación";b.addEventListener("click",function(){jobs.splice(i,1);persist();draw();sum()});c.appendChild(b);list.appendChild(c);
+ });
+}
+document.getElementById("add").addEventListener("click",function(){
+ jobs.unshift({date:"",band:"",place:"",arrival:"",test:"",show:"",status:"Por confirmar",pay:"Pendiente",amount:""});
+ persist();draw();sum();window.scrollTo(0,document.getElementById("add").offsetTop+40);
+});
+draw();sum();
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator) { window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(){}); }); }
+</script></body></html>

@@ -1,0 +1,9 @@
+{
+  "name": "Kichan Iluminador · Agenda",
+  "short_name": "Kichan Agenda",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d0d0e",
+  "theme_color": "#0d0d0e",
+  "description": "Agenda personal de prestaciones de iluminación"
+}
