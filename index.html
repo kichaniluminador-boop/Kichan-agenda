@@ -1,1 +1,437 @@
-const C='kichan-pro-v3';self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./index.html','./manifest.webmanifest'])))});self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x))))));self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+
+<title>Kichan Agenda</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#080808;
+ color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.app{
+ max-width:600px;
+ margin:auto;
+ padding:25px 16px 110px;
+}
+.logo{
+ text-align:center;
+ font-size:13px;
+ letter-spacing:5px;
+ color:#d6ad4b;
+ margin-top:12px;
+}
+h1{
+ text-align:center;
+ margin:8px 0 2px;
+ font-size:29px;
+}
+.sub{
+ text-align:center;
+ color:#888;
+ font-size:12px;
+ letter-spacing:2px;
+ margin-bottom:25px;
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+ margin-bottom:20px;
+}
+.stat{
+ background:#151515;
+ border:1px solid #292929;
+ border-radius:16px;
+ padding:14px 6px;
+ text-align:center;
+}
+.stat b{
+ display:block;
+ color:#d6ad4b;
+ font-size:18px;
+}
+.stat span{
+ color:#888;
+ font-size:10px;
+}
+h2{
+ font-size:13px;
+ letter-spacing:2px;
+ color:#aaa;
+ margin:22px 3px 12px;
+}
+.card{
+ background:#151515;
+ border:1px solid #292929;
+ border-radius:18px;
+ padding:15px;
+ margin-bottom:10px;
+}
+input,select,textarea{
+ width:100%;
+ background:#0d0d0d;
+ border:1px solid #333;
+ color:#fff;
+ border-radius:11px;
+ padding:12px;
+ margin:5px 0;
+ font-size:16px;
+}
+.row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:7px;
+}
+button{
+ border:0;
+ border-radius:12px;
+ padding:13px;
+ font-weight:700;
+ font-size:14px;
+}
+.gold{
+ width:100%;
+ background:#d6ad4b;
+ color:#080808;
+ margin-top:8px;
+}
+.event{
+ background:#151515;
+ border-left:3px solid #d6ad4b;
+ border-radius:13px;
+ padding:13px;
+ margin:8px 0;
+}
+.event strong{
+ display:block;
+ font-size:16px;
+}
+.event small{
+ color:#999;
+}
+.delete{
+ float:right;
+ background:none;
+ color:#777;
+ padding:2px 6px;
+}
+.empty{
+ text-align:center;
+ color:#666;
+ padding:30px 5px;
+}
+nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ background:rgba(12,12,12,.96);
+ border-top:1px solid #292929;
+ display:flex;
+ justify-content:center;
+ padding-bottom:env(safe-area-inset-bottom);
+}
+nav div{
+ width:100%;
+ max-width:600px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+}
+nav button{
+ background:none;
+ color:#777;
+ padding:16px 5px;
+}
+nav button.active{color:#d6ad4b}
+.page{display:none}
+.page.active{display:block}
+.money{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+.moneybox{
+ background:#151515;
+ border:1px solid #292929;
+ border-radius:16px;
+ padding:18px 10px;
+ text-align:center;
+}
+.moneybox b{
+ display:block;
+ font-size:21px;
+ color:#d6ad4b;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="logo">♛ KICHAN ILUMINADOR</div>
+<h1>Agenda</h1>
+<div class="sub">LUCES QUE HACEN HISTORIAS</div>
+
+<section id="agenda" class="page active">
+
+<div class="stats">
+ <div class="stat"><b id="total">0</b><span>EVENTOS</span></div>
+ <div class="stat"><b id="mes">0</b><span>ESTE MES</span></div>
+ <div class="stat"><b id="proximo">—</b><span>PRÓXIMO</span></div>
+</div>
+
+<button class="gold" onclick="mostrarFormulario()">＋ NUEVA PRESTACIÓN</button>
+
+<div id="formulario" class="card" style="display:none;margin-top:12px">
+
+<input id="nombre" placeholder="Nombre del evento">
+
+<div class="row">
+ <input id="fecha" type="date">
+ <input id="hora" type="time">
+</div>
+
+<input id="lugar" placeholder="Lugar">
+
+<div class="row">
+ <input id="monto" type="number" placeholder="Monto $">
+ <select id="estado">
+  <option value="Pendiente">Pendiente</option>
+  <option value="Confirmado">Confirmado</option>
+  <option value="Pagado">Pagado</option>
+ </select>
+</div>
+
+<textarea id="nota" placeholder="Notas"></textarea>
+
+<button class="gold" onclick="guardar()">GUARDAR</button>
+
+</div>
+
+<h2>PRÓXIMAS PRESTACIONES</h2>
+<div id="lista"></div>
+
+</section>
+
+
+<section id="calendario" class="page">
+
+<h2>CALENDARIO</h2>
+
+<div class="card">
+<input id="filtroFecha" type="date" onchange="renderCalendario()">
+</div>
+
+<div id="listaCalendario"></div>
+
+</section>
+
+
+<section id="resumen" class="page">
+
+<h2>RESUMEN</h2>
+
+<div class="money">
+ <div class="moneybox">
+  <b id="ingresos">$0</b>
+  <span>Total contratado</span>
+ </div>
+ <div class="moneybox">
+  <b id="pagado">$0</b>
+  <span>Pagado</span>
+ </div>
+</div>
+
+<h2>ESTADO DE PRESTACIONES</h2>
+<div class="card" id="estados"></div>
+
+</section>
+
+</div>
+
+<nav>
+<div>
+<button id="nAgenda" class="active" onclick="pagina('agenda',this)">⌂<br>Inicio</button>
+<button onclick="pagina('calendario',this)">▣<br>Calendario</button>
+<button onclick="pagina('resumen',this)">▥<br>Resumen</button>
+</div>
+</nav>
+
+<script>
+
+let eventos=JSON.parse(localStorage.getItem("kichan_eventos")||"[]");
+
+function mostrarFormulario(){
+ const f=document.getElementById("formulario");
+ f.style.display=f.style.display==="none"?"block":"none";
+}
+
+function guardar(){
+
+ const nombre=document.getElementById("nombre").value;
+ const fecha=document.getElementById("fecha").value;
+
+ if(!nombre||!fecha){
+  alert("Ingresa nombre y fecha");
+  return;
+ }
+
+ eventos.push({
+  id:Date.now(),
+  nombre,
+  fecha,
+  hora:document.getElementById("hora").value,
+  lugar:document.getElementById("lugar").value,
+  monto:Number(document.getElementById("monto").value)||0,
+  estado:document.getElementById("estado").value,
+  nota:document.getElementById("nota").value
+ });
+
+ eventos.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+
+ localStorage.setItem("kichan_eventos",JSON.stringify(eventos));
+
+ document.getElementById("nombre").value="";
+ document.getElementById("fecha").value="";
+ document.getElementById("hora").value="";
+ document.getElementById("lugar").value="";
+ document.getElementById("monto").value="";
+ document.getElementById("nota").value="";
+
+ document.getElementById("formulario").style.display="none";
+
+ render();
+}
+
+function borrar(id){
+ if(confirm("¿Eliminar esta prestación?")){
+  eventos=eventos.filter(e=>e.id!==id);
+  localStorage.setItem("kichan_eventos",JSON.stringify(eventos));
+  render();
+ }
+}
+
+function tarjeta(e){
+
+ const fecha=new Date(e.fecha+"T12:00:00")
+ .toLocaleDateString("es-CL",{
+  day:"2-digit",
+  month:"short",
+  year:"numeric"
+ });
+
+ return `
+ <div class="event">
+  <button class="delete" onclick="borrar(${e.id})">✕</button>
+  <strong>${e.nombre}</strong>
+  <small>
+   📅 ${fecha}
+   ${e.hora?" · ⏰ "+e.hora:""}
+   ${e.lugar?"<br>📍 "+e.lugar:""}
+   ${e.monto?"<br>💰 $"+e.monto.toLocaleString("es-CL"):""}
+   <br>● ${e.estado}
+  </small>
+ </div>`;
+}
+
+function render(){
+
+ document.getElementById("total").textContent=eventos.length;
+
+ const hoy=new Date();
+
+ const esteMes=eventos.filter(e=>{
+  const d=new Date(e.fecha+"T12:00:00");
+  return d.getMonth()===hoy.getMonth() &&
+         d.getFullYear()===hoy.getFullYear();
+ }).length;
+
+ document.getElementById("mes").textContent=esteMes;
+
+ const futuros=eventos.filter(e=>
+  new Date(e.fecha+"T23:59:59")>=hoy
+ );
+
+ document.getElementById("proximo").textContent=
+ futuros.length
+ ? new Date(futuros[0].fecha+"T12:00:00").getDate()
+ : "—";
+
+ document.getElementById("lista").innerHTML=
+ futuros.length
+ ? futuros.map(tarjeta).join("")
+ : '<div class="empty">No hay prestaciones próximas</div>';
+
+ const total=eventos.reduce((s,e)=>s+e.monto,0);
+
+ const pagos=eventos
+ .filter(e=>e.estado==="Pagado")
+ .reduce((s,e)=>s+e.monto,0);
+
+ document.getElementById("ingresos").textContent=
+ "$"+total.toLocaleString("es-CL");
+
+ document.getElementById("pagado").textContent=
+ "$"+pagos.toLocaleString("es-CL");
+
+ const confirmados=eventos.filter(e=>e.estado==="Confirmado").length;
+ const pendientes=eventos.filter(e=>e.estado==="Pendiente").length;
+ const pagados=eventos.filter(e=>e.estado==="Pagado").length;
+
+ document.getElementById("estados").innerHTML=
+ `Pendientes: <b>${pendientes}</b><br><br>
+ Confirmados: <b>${confirmados}</b><br><br>
+ Pagados: <b>${pagados}</b>`;
+
+ renderCalendario();
+}
+
+function renderCalendario(){
+
+ const f=document.getElementById("filtroFecha").value;
+
+ const datos=f
+ ? eventos.filter(e=>e.fecha===f)
+ : eventos;
+
+ document.getElementById("listaCalendario").innerHTML=
+ datos.length
+ ? datos.map(tarjeta).join("")
+ : '<div class="empty">Sin prestaciones para esta fecha</div>';
+}
+
+function pagina(id,btn){
+
+ document.querySelectorAll(".page")
+ .forEach(p=>p.classList.remove("active"));
+
+ document.getElementById(id).classList.add("active");
+
+ document.querySelectorAll("nav button")
+ .forEach(b=>b.classList.remove("active"));
+
+ btn.classList.add("active");
+
+ if(id==="resumen")render();
+}
+
+render();
+
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("./sw.js");
+}
+
+</script>
+
+</body>
+</html>
