@@ -374,7 +374,62 @@ body{
     font-size:16px;
   }
 }
+/* ===== AJUSTE FINAL IPHONE ===== */
 
+.formbox,
+.formbox *{
+  box-sizing:border-box;
+}
+
+.formbox .row{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  width:100%;
+}
+
+.formbox .row > div{
+  width:100%;
+  min-width:0;
+  margin:0;
+  padding:0;
+}
+
+.formbox .row input,
+.formbox .row select{
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:none;
+  margin:0;
+}
+
+.formbox input[type="time"]{
+  padding-left:8px;
+  padding-right:8px;
+  text-align:center;
+  text-align-last:center;
+}
+
+@media(max-width:430px){
+  .formbox{
+    width:100%;
+    padding:30px 20px;
+  }
+
+  .formbox .row{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:12px;
+  }
+
+  .formbox .row input,
+  .formbox .row select{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    font-size:16px;
+  }
+}
 </style> 
 
 </head>
