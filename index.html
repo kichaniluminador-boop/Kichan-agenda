@@ -51,6 +51,12 @@ textarea{min-height:100px;resize:vertical}.row{display:grid;grid-template-column
 @media(max-width:520px){.app{padding-left:18px;padding-right:18px}.brand h1{font-size:50px}.brand .name{letter-spacing:6px;font-size:14px}.brand .tag{letter-spacing:5px;font-size:14px}.stats{gap:8px}.stat{padding:25px 4px;border-radius:28px}.stat strong{font-size:32px}.actions{grid-template-columns:1fr 1fr 1fr}.actions button{padding:12px 5px;font-size:14px}}
 /* AJUSTE IPHONE */
 body{
+  padding-bottom:calc(200px + env(safe-area-inset-bottom));
+}
+
+.app{
+  padding-bottom:calc(200px + env(safe-area-inset-bottom)) !important;
+}
   padding-bottom:calc(115px + env(safe-area-inset-bottom));
 }
 
