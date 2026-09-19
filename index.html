@@ -1032,7 +1032,8 @@ function renderCalendar(){
         background:${hasEvent ? "#e7b93f" : "#090909"};
         color:${hasEvent ? "#050505" : "#f5f5f5"};
         font-weight:${hasEvent ? "800" : "500"};
-      ">
+      cursor:${hasEvent ? "pointer" : "default"};
+" ${hasEvent ? `onclick="openCalendarEvent('${date}')"` : ""}>
         <span>${day}</span>
         ${hasEvent ? `<small style="font-size:9px;margin-top:2px">●</small>` : ""}
       </div>
@@ -1118,6 +1119,15 @@ function showView(view){
   }
 
   window.scrollTo(0,0);
+}
+  function openCalendarEvent(date){
+  const event = events.find(e => e.date === date);
+
+  if(!event) return;
+
+  if(event.id !== undefined && event.id !== null){
+    editEvent(event.id);
+  }
 }
 
 render();
