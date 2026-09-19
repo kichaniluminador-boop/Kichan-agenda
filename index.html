@@ -299,7 +299,7 @@ $('formWrap').innerHTML=`<form id="eventForm" class="formbox"><h2>${editing?'EDI
 <label>FECHA</label><input id="fdate" type="date" required value="${esc(o.date||'')}">
 <label>BANDA / ARTISTA</label><input id="fartist" required placeholder="Ej: Luis Lambis" value="${esc(o.artist||'')}">
 <label>LOCALIDAD / LUGAR</label><input id="fplace" placeholder="Ej: Parque O'Higgins" value="${esc(o.place||'')}">
-<div class="row"><div><label>LLEGADA</label><input id="farrival" type="time" value="${esc(o.arrival||'')}"></div><div><label>PRUEBA</label><input id="ftest" type="time" value="${esc(o.test||'')}"></div></div>
+<div class="row"><div><label>SALIDA</label><input id="farrival" type="time" value="${esc(o.arrival||'')}"></div><div><label>PRUEBA</label><input id="ftest" type="time" value="${esc(o.test||'')}"></div></div>
 <label>SHOW</label><input id="fshow" type="time" value="${esc(o.show||'')}">
 <div class="row"><div><label>ESTADO</label><select id="fstatus">${opts(['Confirmado','Por confirmar','Reemplazo'],o.status)}</select></div><div><label>PAGO</label><select id="fpayment">${opts(['Pendiente','Pagado'],o.payment)}</select></div></div>
 <label>MONTO $</label><input id="famount" type="number" inputmode="numeric" min="0" value="${Number(o.amount)||''}">
