@@ -977,39 +977,95 @@ function render(){
 }
 
 function renderCalendar(){
-
   const months=[
     "Enero","Febrero","Marzo","Abril","Mayo","Junio",
     "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
   ];
 
   const now=new Date();
+  const year=now.getFullYear();
+  const month=now.getMonth();
 
-  $("calendarTitle").textContent=
-    `${months[now.getMonth()]} ${now.getFullYear()}`;
+  $("calendarTitle").textContent=`${months[month]} ${year}`;
 
-  const list=events.filter(e=>{
-    if(!e.date) return false;
+  const firstDay=new Date(year,month,1);
+  const lastDay=new Date(year,month+1,0).getDate();
+  const start=(firstDay.getDay()+6)%7;
 
-    const d=new Date(e.date+"T12:00:00");
+  let html=`
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:8px;
+      text-align:center;
+      margin-top:22px;
+    ">
+      ${["L","M","X","J","V","S","D"].map(d=>
+        `<div style="color:#969696;font-weight:700;padding:8px 0">${d}</div>`
+      ).join("")}
+  `;
 
-    return d.getMonth()===now.getMonth() &&
-           d.getFullYear()===now.getFullYear();
-  });
+  for(let i=0;i<start;i++){
+    html+=`<div></div>`;
+  }
 
-  $("calendarList").innerHTML=
-    list.length
-      ? list.map(e=>`
-          <div class="summary-line">
-            <span>
-              ${shortDate(e.date)} · ${escapeHTML(e.artist)}
-            </span>
-            <strong>${e.showtime || "—"}</strong>
-          </div>
-        `).join("")
-      : `<div class="empty">No hay prestaciones este mes</div>`;
+  for(let day=1;day<=lastDay;day++){
+    const date=
+      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+    const dayEvents=events.filter(e=>e.date===date);
+    const hasEvent=dayEvents.length>0;
+    const isToday=
+      day===now.getDate() &&
+      month===now.getMonth() &&
+      year===now.getFullYear();
+
+    html+=`
+      <div style="
+        min-height:52px;
+        border-radius:16px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        border:${isToday ? "1px solid #e7b93f" : "1px solid transparent"};
+        background:${hasEvent ? "#e7b93f" : "#090909"};
+        color:${hasEvent ? "#050505" : "#f5f5f5"};
+        font-weight:${hasEvent ? "800" : "500"};
+      ">
+        <span>${day}</span>
+        ${hasEvent ? `<small style="font-size:9px;margin-top:2px">●</small>` : ""}
+      </div>
+    `;
+  }
+
+  html+=`</div>`;
+
+  const monthEvents=events
+    .filter(e=>{
+      if(!e.date) return false;
+      const d=new Date(e.date+"T12:00:00");
+      return d.getMonth()===month && d.getFullYear()===year;
+    })
+    .sort((a,b)=>a.date.localeCompare(b.date));
+
+  html+=`
+    <div style="margin-top:28px">
+      ${
+        monthEvents.length
+          ? monthEvents.map(e=>`
+              <div class="summary-line">
+                <span>${shortDate(e.date)} · ${e.artist || "Sin artista"}</span>
+                <strong>${e.showtime || "—"}</strong>
+              </div>
+            `).join("")
+          : `<div class="empty">No hay prestaciones este mes</div>`
+      }
+    </div>
+  `;
+
+  $("calendarList").innerHTML=html;
 }
-
 function renderSummary(){
 
   const confirmed=
