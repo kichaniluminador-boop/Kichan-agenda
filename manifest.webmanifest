@@ -1,12 +1,12 @@
 {
   "name": "Kichan Iluminador · Agenda",
   "short_name": "Kichan Agenda",
+  "description": "Agenda personal de prestaciones de Kichan Iluminador",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "description": "Agenda personal de prestaciones de Kichan Iluminador",
+  "background_color": "#050505",
+  "theme_color": "#050505",
   "icons": [
     {
       "src": "./apple-touch-icon.png",
