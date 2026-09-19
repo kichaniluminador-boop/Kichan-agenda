@@ -74,6 +74,74 @@ body{
     padding:20px 14px 170px;
   }
 }
+/* ===== CALENDARIO COMPACTO IPHONE ===== */
+
+#calendario{
+  padding-bottom:140px;
+}
+
+.calendar-head{
+  margin-bottom:18px;
+}
+
+.calendar-title{
+  font-size:28px;
+}
+
+.week,
+.grid{
+  gap:8px;
+}
+
+.day{
+  aspect-ratio:auto;
+  height:58px;
+  min-height:58px;
+  border-radius:18px;
+  font-size:22px;
+}
+
+/* Días con prestaciones */
+.day.has-event{
+  color:var(--g);
+  font-weight:800;
+}
+
+/* Día seleccionado */
+.day.selected{
+  border-color:var(--g);
+}
+
+/* Menos espacio entre calendario y prestaciones */
+#dayEvents{
+  margin-top:25px;
+}
+
+/* Evita que el menú inferior tape las tarjetas */
+.app{
+  padding-bottom:170px;
+}
+
+.nav{
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+}
+
+@media(max-width:520px){
+  .day{
+    height:54px;
+    min-height:54px;
+    border-radius:16px;
+  }
+
+  .week,
+  .grid{
+    gap:7px;
+  }
+
+  #calendario{
+    padding-bottom:150px;
+  }
+}  
 </style>
 </head>
 <body>
