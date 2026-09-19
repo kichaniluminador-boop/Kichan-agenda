@@ -247,7 +247,132 @@ body{
 
   #calendario{
     padding-bottom:240px;
+/* ===== FORMULARIO PRO KICHAN ===== */
 
+.formbox{
+  width:100%;
+  max-width:680px;
+  margin:24px auto 50px;
+  padding:34px 28px;
+  border:2px solid #292929;
+  border-radius:38px;
+  background:#151515;
+}
+
+.formbox h2{
+  text-align:left;
+  margin:0 0 34px;
+  font-size:28px;
+  letter-spacing:5px;
+}
+
+.formbox label{
+  display:block;
+  margin:22px 8px 10px;
+  color:#9b9b9b;
+  font-size:16px;
+  letter-spacing:.4px;
+}
+
+.formbox input,
+.formbox select,
+.formbox textarea{
+  display:block;
+  width:100%;
+  min-width:0;
+  height:72px;
+  margin:0;
+  padding:0 20px;
+  border:2px solid #353535;
+  border-radius:26px;
+  background:#080808;
+  color:#f5f5f5;
+  font-size:18px;
+  outline:none;
+}
+
+.formbox textarea{
+  height:110px;
+  padding-top:20px;
+  resize:none;
+}
+
+.formbox input:focus,
+.formbox select:focus,
+.formbox textarea:focus{
+  border-color:#e7b93f;
+}
+
+.formbox .row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:24px;
+  width:100%;
+}
+
+.formbox .row > div{
+  width:100%;
+  min-width:0;
+}
+
+/* SALIDA / PRUEBA perfectamente iguales */
+.formbox .row input,
+.formbox .row select{
+  width:100%;
+}
+
+/* Botones inferiores */
+.form-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-top:30px;
+}
+
+.form-actions button{
+  min-height:68px;
+  border-radius:24px;
+  font-weight:700;
+  font-size:17px;
+}
+
+.form-actions .primary{
+  background:#e7b93f;
+  color:#111;
+}
+
+.form-actions .secondary{
+  background:#1b1b1b;
+  color:#fff;
+  border:1px solid #444;
+}
+
+/* iPhone */
+@media(max-width:520px){
+
+  .formbox{
+    width:100%;
+    padding:28px 20px 34px;
+    border-radius:32px;
+  }
+
+  .formbox .row{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:14px;
+  }
+
+  .formbox input,
+  .formbox select,
+  .formbox textarea{
+    font-size:17px;
+  }
+
+  .formbox .row input,
+  .formbox .row select{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}
 
 
 </style> 
