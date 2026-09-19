@@ -1,13 +1,136 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080808"><title>Kichan Agenda</title><link rel="manifest" href="manifest.webmanifest"><style>
-:root{--g:#e0b64c;--c:#151515;--l:#303030}*{box-sizing:border-box}body{margin:0;background:#080808;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:620px;margin:auto;padding:28px 16px calc(120px + env(safe-area-inset-bottom))}.brand{text-align:center;color:var(--g);letter-spacing:6px}.title{text-align:center;font-size:42px;margin:20px 0 5px}.tag{text-align:center;color:#888;letter-spacing:4px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:35px 0}.stat,.box,.event,.form{background:var(--c);border:1px solid var(--l);border-radius:22px}.stat{text-align:center;padding:24px 5px}.stat b{display:block;color:var(--g);font-size:28px}.stat span,label{color:#999;font-size:11px}.primary{width:100%;border:0;border-radius:20px;background:var(--g);color:#111;font-weight:800;font-size:19px;padding:19px}button{font:inherit}.form{display:none;padding:16px;margin-top:18px}.form.open{display:block}label{display:block;margin:11px 3px 5px;text-transform:uppercase}input,select,textarea{width:100%;background:#0e0e0e;color:#fff;border:1px solid #383838;border-radius:14px;padding:14px;font-size:16px;min-width:0}textarea{min-height:85px}.g2,.g3{display:grid;gap:9px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}h2{font-size:17px;letter-spacing:4px;color:#bbb;margin:38px 6px 20px}.event{padding:16px;margin:12px 0}.event h3{margin:0 0 5px}.muted{color:#aaa}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.chip{border:1px solid #3a3a3a;border-radius:999px;padding:6px 9px;color:#bbb;font-size:12px}.money{color:var(--g);font-weight:700}.actions{display:flex;gap:8px;margin-top:12px}.actions button{flex:1;border:1px solid #444;background:#1b1b1b;color:#fff;border-radius:12px;padding:11px}.actions .danger{color:#ef9292}.empty{text-align:center;color:#666;padding:45px}.view{display:none}.view.active{display:block}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{text-align:center;padding:22px}.box b{display:block;color:var(--g);font-size:23px}.box span{color:#999}.nav{position:fixed;bottom:0;left:0;right:0;z-index:9;background:#0b0b0bf2;border-top:1px solid #292929;padding:12px 8px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:28px}.nav button{border:0;background:none;color:#777;font-weight:700}.nav .active{color:var(--g)}@media(max-width:420px){.brand{font-size:14px}.g3{grid-template-columns:1fr 1fr}}
-</style></head><body><main class="app"><header><div class="brand">♛ KICHAN ILUMINADOR</div><h1 class="title">Agenda</h1><div class="tag">LUCES QUE HACEN HISTORIAS</div></header>
-<section id="inicio" class="view active"><div class="stats"><div class="stat"><b id="total">0</b><span>EVENTOS</span></div><div class="stat"><b id="month">0</b><span>ESTE MES</span></div><div class="stat"><b id="next">—</b><span>PRÓXIMO</span></div></div><button class="primary" id="new">+ NUEVA PRESTACIÓN</button>
-<form id="form" class="form"><input type="hidden" id="eid"><label>Fecha</label><input id="date" type="date" required><label>Banda / Artista</label><input id="artist" required placeholder="Ej: Luis Lambis"><label>Localidad / Lugar</label><input id="place" placeholder="Ej: Parque O'Higgins"><div class="g3"><div><label>Llegada</label><input id="arrival" type="time"></div><div><label>Prueba</label><input id="sound" type="time"></div><div><label>Show</label><input id="show" type="time"></div></div><div class="g2"><div><label>Estado</label><select id="status"><option>Confirmado</option><option>Por confirmar</option><option>Reemplazo</option></select></div><div><label>Pago</label><select id="payment"><option>Pendiente</option><option>Pagado</option></select></div></div><label>Monto $</label><input id="amount" type="number" inputmode="numeric" min="0"><label>Notas</label><textarea id="notes"></textarea><div class="actions"><button type="button" id="cancel">Cancelar</button><button class="primary">GUARDAR</button></div></form><h2>PRÓXIMAS PRESTACIONES</h2><div id="events"></div></section>
-<section id="calendario" class="view"><h2>CALENDARIO</h2><div id="calendar"></div></section><section id="resumen" class="view"><h2>RESUMEN</h2><div class="summary"><div class="box"><b id="paid">$0</b><span>Pagado</span></div><div class="box"><b id="pending">$0</b><span>Por cobrar</span></div><div class="box"><b id="confirmed">0</b><span>Confirmadas</span></div><div class="box"><b id="repl">0</b><span>Reemplazos</span></div></div></section></main>
-<nav class="nav"><button data-v="inicio" class="active">⌂ Inicio</button><button data-v="calendario">▣ Calendario</button><button data-v="resumen">▥ Resumen</button></nav><script>
-const K='kichan-agenda-v4',$=x=>document.getElementById(x);let D=JSON.parse(localStorage.getItem(K)||'[]');const cash=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(+n||0),fmt=d=>d?d.split('-').reverse().join('-'):'',esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function save(){localStorage.setItem(K,JSON.stringify(D));render()}function close(){$('form').reset();$('eid').value='';$('form').classList.remove('open')}$('new').onclick=()=>{close();$('date').value=new Date().toISOString().slice(0,10);$('form').classList.add('open')};$('cancel').onclick=close;
-$('form').onsubmit=e=>{e.preventDefault();let o={id:$('eid').value||Date.now()+'',date:$('date').value,artist:$('artist').value.trim(),place:$('place').value.trim(),arrival:$('arrival').value,sound:$('sound').value,show:$('show').value,status:$('status').value,payment:$('payment').value,amount:+$('amount').value||0,notes:$('notes').value.trim()},i=D.findIndex(x=>x.id===o.id);i<0?D.push(o):D[i]=o;save();close()};
-function edit(id){let o=D.find(x=>x.id===id);for(let k in o)if($(k))$(k).value=o[k];$('eid').value=o.id;$('form').classList.add('open');scrollTo(0,350)}function dup(id){let o=D.find(x=>x.id===id);D.push({...o,id:Date.now()+'',payment:'Pendiente'});save()}function del(id){if(confirm('¿Eliminar esta prestación?')){D=D.filter(x=>x.id!==id);save()}}window.edit=edit;window.dup=dup;window.del=del;
-function card(o){return `<article class="event"><h3>${esc(o.artist)}</h3><div class="muted">${esc(o.place)} · ${fmt(o.date)}</div><div class="chips">${o.arrival?`<span class="chip">Llegada ${o.arrival}</span>`:''}${o.sound?`<span class="chip">Prueba ${o.sound}</span>`:''}${o.show?`<span class="chip">Show ${o.show}</span>`:''}<span class="chip">${o.status}</span><span class="chip">${o.payment}</span></div><div class="money">${cash(o.amount)}</div>${o.notes?`<p>${esc(o.notes)}</p>`:''}<div class="actions"><button onclick="edit('${o.id}')">Editar</button><button onclick="dup('${o.id}')">Duplicar</button><button class="danger" onclick="del('${o.id}')">Eliminar</button></div></article>`}
-function render(){let S=[...D].sort((a,b)=>a.date.localeCompare(b.date)),today=new Date().toISOString().slice(0,10),U=S.filter(x=>x.date>=today),now=new Date(),ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');$('events').innerHTML=U.length?U.map(card).join(''):'<div class="empty">No hay prestaciones próximas</div>';$('calendar').innerHTML=S.length?S.map(card).join(''):'<div class="empty">No hay prestaciones guardadas</div>';$('total').textContent=D.length;$('month').textContent=D.filter(x=>x.date.startsWith(ym)).length;$('next').textContent=U[0]?fmt(U[0].date).slice(0,5):'—';$('paid').textContent=cash(D.filter(x=>x.payment==='Pagado').reduce((s,x)=>s+x.amount,0));$('pending').textContent=cash(D.filter(x=>x.payment==='Pendiente').reduce((s,x)=>s+x.amount,0));$('confirmed').textContent=D.filter(x=>x.status==='Confirmado').length;$('repl').textContent=D.filter(x=>x.status==='Reemplazo').length}document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.view,.nav button').forEach(x=>x.classList.remove('active'));$(b.dataset.v).classList.add('active');b.classList.add('active');scrollTo(0,0)});if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
-</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Kichan Agenda</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+:root{--g:#e7b93f;--bg:#050505;--card:#151515;--line:#343434;--muted:#929292;--white:#f5f5f5;--red:#ee8b8b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:auto;padding:34px 28px calc(125px + env(safe-area-inset-bottom))}
+.brand{text-align:center;margin:18px 0 50px}
+.brand .name{color:var(--g);font-size:17px;letter-spacing:8px}.brand h1{font-size:58px;margin:28px 0 10px}.brand .tag{color:#888;letter-spacing:8px;font-size:17px}
+.view{display:none}.view.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px}
+.stat{border:2px solid #292929;border-radius:36px;text-align:center;padding:32px 8px;background:#111}
+.stat strong{display:block;color:var(--g);font-size:38px}.stat span{color:#999;font-size:14px}
+.primary{width:100%;border:0;border-radius:28px;background:var(--g);color:#111;font-weight:800;padding:23px;font-size:22px}
+h2{letter-spacing:7px;font-size:22px;margin:45px 8px 26px}
+.empty{color:#777;text-align:center;padding:35px}
+.event{background:var(--card);border:2px solid #303030;border-radius:32px;padding:28px;margin:0 0 20px}
+.event h3{font-size:25px;margin:0 0 8px}.sub{color:#aaa;margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.chip{border:1px solid #444;border-radius:22px;padding:8px 13px;color:#bbb}
+.money{color:var(--g);font-size:24px;font-weight:800;margin:20px 0}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.actions button,.secondary,.danger{background:#171717;color:#eee;border:1px solid #444;border-radius:18px;padding:14px}.danger{color:var(--red)}
+.formbox{background:#151515;border:2px solid #303030;border-radius:32px;padding:28px;margin-top:20px}
+.formbox h2{margin:0 0 25px;letter-spacing:3px}
+label{display:block;color:#999;font-size:14px;margin:18px 5px 8px}
+input,select,textarea{width:100%;background:#0b0b0b;color:#fff;border:2px solid #343434;border-radius:22px;padding:17px;min-height:58px}
+textarea{min-height:100px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.form-actions .primary{font-size:17px;padding:17px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;margin:10px 0 20px}
+.calendar-head button{border:1px solid #444;background:#151515;color:#fff;border-radius:15px;padding:12px 18px}
+.calendar-title{text-transform:capitalize;font-size:21px;font-weight:700}
+.week,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week div{text-align:center;color:#777;font-size:12px;padding:7px 0}
+.day{aspect-ratio:1;border:1px solid #292929;border-radius:14px;background:#111;color:#ddd;position:relative}.day.off{opacity:.25}.day.today{border-color:var(--g)}.day.has{color:var(--g);font-weight:800}.day.has:after{content:"";width:5px;height:5px;background:var(--g);border-radius:50%;position:absolute;bottom:7px;left:50%;transform:translateX(-50%)}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.summary{background:#151515;border:1px solid #333;border-radius:24px;padding:20px}.summary b{display:block;color:var(--g);font-size:25px;margin-top:7px}.backup{margin-top:30px;display:grid;gap:12px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,5,5,.97);border-top:1px solid #333;padding:17px 10px calc(17px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:20}
+.nav button{border:0;background:none;color:#777;font-weight:700;font-size:17px}.nav button.active{color:var(--g)}
+.toast{position:fixed;left:50%;bottom:105px;transform:translateX(-50%);background:#252525;border:1px solid #555;padding:12px 18px;border-radius:20px;display:none;z-index:30}
+@media(max-width:520px){.app{padding-left:18px;padding-right:18px}.brand h1{font-size:50px}.brand .name{letter-spacing:6px;font-size:14px}.brand .tag{letter-spacing:5px;font-size:14px}.stats{gap:8px}.stat{padding:25px 4px;border-radius:28px}.stat strong{font-size:32px}.actions{grid-template-columns:1fr 1fr 1fr}.actions button{padding:12px 5px;font-size:14px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="brand"><div class="name">♛ KICHAN ILUMINADOR</div><h1>Agenda</h1><div class="tag">LUCES QUE HACEN HISTORIAS</div></header>
+
+<section id="inicio" class="view active">
+<div class="stats"><div class="stat"><strong id="sTotal">0</strong><span>EVENTOS</span></div><div class="stat"><strong id="sMes">0</strong><span>ESTE MES</span></div><div class="stat"><strong id="sNext">—</strong><span>PRÓXIMO</span></div></div>
+<button class="primary" onclick="newEvent()">+ NUEVA PRESTACIÓN</button>
+<div id="formWrap"></div>
+<h2>PRÓXIMAS PRESTACIONES</h2><div id="upcoming"></div>
+</section>
+
+<section id="calendario" class="view">
+<h2>CALENDARIO</h2>
+<div class="calendar-head"><button onclick="moveMonth(-1)">‹</button><div id="calTitle" class="calendar-title"></div><button onclick="moveMonth(1)">›</button></div>
+<div class="week"><div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div></div>
+<div id="calGrid" class="grid"></div>
+<div id="dayEvents" style="margin-top:25px"></div>
+</section>
+
+<section id="resumen" class="view">
+<h2>RESUMEN</h2><div id="summary" class="summary-grid"></div>
+<div class="backup"><button class="primary" onclick="exportData()">DESCARGAR RESPALDO</button><button class="secondary" onclick="document.getElementById('importFile').click()">IMPORTAR RESPALDO</button><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+</section>
+</main>
+
+<nav class="nav"><button data-v="inicio" class="active">⌂ Inicio</button><button data-v="calendario">▣ Calendario</button><button data-v="resumen">▥ Resumen</button></nav>
+<div id="toast" class="toast"></div>
+
+<script>
+const K='kichan-agenda-v4', $=id=>document.getElementById(id);
+let D=load(), editing=null, cal=new Date();
+function load(){try{let x=JSON.parse(localStorage.getItem(K)||'[]');return Array.isArray(x)?x:[]}catch(e){return[]}}
+function save(){localStorage.setItem(K,JSON.stringify(D));render()}
+function id(){return (crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random())}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateObj(s){return new Date((s||'1970-01-01')+'T12:00:00')}
+function fmtDate(s){if(!s)return 'Sin fecha';return dateObj(s).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'})}
+function money(n){return new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(Number(n)||0)}
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',1800)}
+function normalize(o){return {id:o.id||id(),date:o.date||o.fecha||'',artist:o.artist||o.artista||o.banda||o.nombre||o.name||o.title||'',place:o.place||o.lugar||o.localidad||'',arrival:o.arrival||o.llegada||'',test:o.test||o.prueba||o.soundcheck||'',show:o.show||o.hora||o.time||'',status:o.status||o.estado||'Confirmado',payment:o.payment||o.pago||'Pendiente',amount:Number(o.amount??o.monto??0),notes:o.notes||o.notas||''}}
+D=D.map(normalize);localStorage.setItem(K,JSON.stringify(D));
+
+function newEvent(){editing=null;showForm({date:new Date().toISOString().slice(0,10),status:'Confirmado',payment:'Pendiente'})}
+function editEvent(i){editing=i;showForm(D.find(x=>x.id===i)||{})}
+function showForm(o){
+$('formWrap').innerHTML=`<form id="eventForm" class="formbox"><h2>${editing?'EDITAR':'NUEVA'} PRESTACIÓN</h2>
+<label>FECHA</label><input id="fdate" type="date" required value="${esc(o.date||'')}">
+<label>BANDA / ARTISTA</label><input id="fartist" required placeholder="Ej: Luis Lambis" value="${esc(o.artist||'')}">
+<label>LOCALIDAD / LUGAR</label><input id="fplace" placeholder="Ej: Parque O'Higgins" value="${esc(o.place||'')}">
+<div class="row"><div><label>LLEGADA</label><input id="farrival" type="time" value="${esc(o.arrival||'')}"></div><div><label>PRUEBA</label><input id="ftest" type="time" value="${esc(o.test||'')}"></div></div>
+<label>SHOW</label><input id="fshow" type="time" value="${esc(o.show||'')}">
+<div class="row"><div><label>ESTADO</label><select id="fstatus">${opts(['Confirmado','Por confirmar','Reemplazo'],o.status)}</select></div><div><label>PAGO</label><select id="fpayment">${opts(['Pendiente','Pagado'],o.payment)}</select></div></div>
+<label>MONTO $</label><input id="famount" type="number" inputmode="numeric" min="0" value="${Number(o.amount)||''}">
+<label>NOTAS</label><textarea id="fnotes" placeholder="Notas de la prestación">${esc(o.notes||'')}</textarea>
+<div class="form-actions"><button type="button" class="secondary" onclick="closeForm()">CANCELAR</button><button class="primary">GUARDAR</button></div></form>`;
+$('eventForm').onsubmit=e=>{e.preventDefault();let x={id:editing||id(),date:$('fdate').value,artist:$('fartist').value.trim(),place:$('fplace').value.trim(),arrival:$('farrival').value,test:$('ftest').value,show:$('fshow').value,status:$('fstatus').value,payment:$('fpayment').value,amount:Number($('famount').value)||0,notes:$('fnotes').value.trim()};let p=D.findIndex(a=>a.id===editing);if(p>=0)D[p]=x;else D.push(x);editing=null;$('formWrap').innerHTML='';save();toast('Prestación guardada')};
+$('formWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function opts(a,v){return a.map(x=>`<option ${x===(v||a[0])?'selected':''}>${x}</option>`).join('')}
+function closeForm(){editing=null;$('formWrap').innerHTML=''}
+function duplicateEvent(i){let o=D.find(x=>x.id===i);if(!o)return;let c={...o,id:id()};D.push(c);save();toast('Prestación duplicada')}
+function deleteEvent(i){if(confirm('¿Eliminar esta prestación?')){D=D.filter(x=>x.id!==i);save();toast('Prestación eliminada')}}
+function card(o){return `<article class="event"><h3>${esc(o.artist||'Sin artista')}</h3><div class="sub">${esc(o.place||'')} · ${fmtDate(o.date)}</div><div class="chips">${o.arrival?`<span class="chip">Llegada ${esc(o.arrival)}</span>`:''}${o.test?`<span class="chip">Prueba ${esc(o.test)}</span>`:''}${o.show?`<span class="chip">Show ${esc(o.show)}</span>`:''}<span class="chip">${esc(o.status)}</span><span class="chip">${esc(o.payment)}</span></div><div class="money">${money(o.amount)}</div>${o.notes?`<div class="sub">${esc(o.notes)}</div>`:''}<div class="actions"><button onclick="editEvent('${o.id}')">Editar</button><button onclick="duplicateEvent('${o.id}')">Duplicar</button><button class="danger" onclick="deleteEvent('${o.id}')">Eliminar</button></div></article>`}
+
+function render(){
+let S=[...D].sort((a,b)=>(a.date+a.show).localeCompare(b.date+b.show)), now=new Date(), today=now.toISOString().slice(0,10), future=S.filter(x=>!x.date||x.date>=today);
+$('upcoming').innerHTML=future.length?future.map(card).join(''):'<div class="empty">No hay prestaciones próximas</div>';
+$('sTotal').textContent=D.length;$('sMes').textContent=D.filter(x=>{let d=dateObj(x.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).length;
+$('sNext').textContent=future[0]?.date?dateObj(future[0].date).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'}):'—';
+renderCalendar();renderSummary()
+}
+function renderSummary(){let paid=D.filter(x=>x.payment==='Pagado'), pending=D.filter(x=>x.payment!=='Pagado');let cells=[['TOTAL EVENTOS',D.length],['CONFIRMADOS',D.filter(x=>x.status==='Confirmado').length],['POR CONFIRMAR',D.filter(x=>x.status==='Por confirmar').length],['REEMPLAZOS',D.filter(x=>x.status==='Reemplazo').length],['PAGADAS',paid.length],['PENDIENTES',pending.length],['TOTAL PAGADO',money(paid.reduce((s,x)=>s+x.amount,0))],['POR COBRAR',money(pending.reduce((s,x)=>s+x.amount,0))]];$('summary').innerHTML=cells.map(x=>`<div class="summary"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+function moveMonth(n){cal=new Date(cal.getFullYear(),cal.getMonth()+n,1);renderCalendar()}
+function renderCalendar(){let y=cal.getFullYear(),m=cal.getMonth();$('calTitle').textContent=cal.toLocaleDateString('es-CL',{month:'long',year:'numeric'});let first=new Date(y,m,1),start=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),prev=new Date(y,m,0).getDate(),out='';for(let i=0;i<42;i++){let d=i-start+1,dt,off=false;if(d<1){dt=new Date(y,m-1,prev+d);off=true}else if(d>days){dt=new Date(y,m+1,d-days);off=true}else dt=new Date(y,m,d);let ds=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`,has=D.some(x=>x.date===ds),tod=ds===new Date().toISOString().slice(0,10);out+=`<button class="day ${off?'off':''} ${has?'has':''} ${tod?'today':''}" onclick="showDay('${ds}')">${dt.getDate()}</button>`}$('calGrid').innerHTML=out}
+function showDay(ds){let a=D.filter(x=>x.date===ds);$('dayEvents').innerHTML=`<h3>${fmtDate(ds)}</h3>`+(a.length?a.map(card).join(''):'<div class="empty">Sin prestaciones este día</div>')}
+function exportData(){let blob=new Blob([JSON.stringify({app:'Kichan Agenda',version:4,exported:new Date().toISOString(),events:D},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kichan-agenda-respaldo.json';a.click();URL.revokeObjectURL(a.href)}
+$('importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result),a=Array.isArray(j)?j:j.events;if(!Array.isArray(a))throw 0;if(confirm(`¿Importar ${a.length} prestaciones? Esto reemplazará los datos actuales.`)){D=a.map(normalize);save();toast('Respaldo importado')}}catch(_){alert('El archivo no es un respaldo válido')}};r.readAsText(f);e.target.value=''}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));$(b.dataset.v).classList.add('active');b.classList.add('active');render()});
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+render();
+</script>
+</body>
+</html>
