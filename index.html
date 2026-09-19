@@ -430,6 +430,60 @@ body{
     font-size:16px;
   }
 }
+/* ===== CORRECCIÓN DEFINITIVA IPHONE ===== */
+
+.formbox{
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:680px !important;
+  overflow:hidden !important;
+}
+
+.formbox .row{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+.formbox .row > div{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
+
+.formbox .row input,
+.formbox .row select{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+
+.formbox input[type="time"]{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  text-align:center !important;
+  padding-left:8px !important;
+  padding-right:8px !important;
+}
+
+@media(max-width:430px){
+  .formbox{
+    padding-left:20px !important;
+    padding-right:20px !important;
+  }
+
+  .formbox .row{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:10px !important;
+  }
+}    
 </style> 
 
 </head>
