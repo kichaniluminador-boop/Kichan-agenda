@@ -120,7 +120,7 @@ D=D.map(normalize);localStorage.setItem(K,JSON.stringify(D));
 
 function newEvent(){editing=null;showForm({date:new Date().toISOString().slice(0,10),status:'Confirmado',payment:'Pendiente'})}
 function editEvent(i){editing=i;showForm(D.find(x=>x.id===i)||{})}
-function showForm(o){
+function showForm(o){document.querySelector('.nav').style.display='none';
 $('formWrap').innerHTML=`<form id="eventForm" class="formbox"><h2>${editing?'EDITAR':'NUEVA'} PRESTACIÓN</h2>
 <label>FECHA</label><input id="fdate" type="date" required value="${esc(o.date||'')}">
 <label>BANDA / ARTISTA</label><input id="fartist" required placeholder="Ej: Luis Lambis" value="${esc(o.artist||'')}">
@@ -135,7 +135,7 @@ $('eventForm').onsubmit=e=>{e.preventDefault();let x={id:editing||id(),date:$('f
 $('formWrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function opts(a,v){return a.map(x=>`<option ${x===(v||a[0])?'selected':''}>${x}</option>`).join('')}
-function closeForm(){editing=null;$('formWrap').innerHTML=''}
+function closeForm(){editing=null;$('formWrap').innerHTML='';document.querySelector('.nav').style.display='flex';window.scrollTo({top:0,behavior:'smooth'});}
 function duplicateEvent(i){let o=D.find(x=>x.id===i);if(!o)return;let c={...o,id:id()};D.push(c);save();toast('Prestación duplicada')}
 function deleteEvent(i){if(confirm('¿Eliminar esta prestación?')){D=D.filter(x=>x.id!==i);save();toast('Prestación eliminada')}}
 function card(o){return `<article class="event"><h3>${esc(o.artist||'Sin artista')}</h3><div class="sub">${esc(o.place||'')} · ${fmtDate(o.date)}</div><div class="chips">${o.arrival?`<span class="chip">Llegada ${esc(o.arrival)}</span>`:''}${o.test?`<span class="chip">Prueba ${esc(o.test)}</span>`:''}${o.show?`<span class="chip">Show ${esc(o.show)}</span>`:''}<span class="chip">${esc(o.status)}</span><span class="chip">${esc(o.payment)}</span></div><div class="money">${money(o.amount)}</div>${o.notes?`<div class="sub">${esc(o.notes)}</div>`:''}<div class="actions"><button onclick="editEvent('${o.id}')">Editar</button><button onclick="duplicateEvent('${o.id}')">Duplicar</button><button class="danger" onclick="deleteEvent('${o.id}')">Eliminar</button></div></article>`}
