@@ -1033,7 +1033,7 @@ function renderCalendar(){
         color:${hasEvent ? "#050505" : "#f5f5f5"};
         font-weight:${hasEvent ? "800" : "500"};
       cursor:${hasEvent ? "pointer" : "default"};
-" ${hasEvent ? `onclick="openCalendarEvent('${date}')"` : ""}>
+${hasEvent ? `onclick="openCalendarEvent('${date}')"` : ""}
         <span>${day}</span>
         ${hasEvent ? `<small style="font-size:9px;margin-top:2px">●</small>` : ""}
       </div>
