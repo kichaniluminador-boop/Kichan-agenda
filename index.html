@@ -190,7 +190,10 @@ function dayClick(date){
 
   $("ml").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function summary(){$("rt").textContent=events.length;$("rp").textContent=events.filter(e=>e.payment==="Pagado").length;$("rpe").textContent=events.filter(e=>e.payment!=="Pagado").length;let amount=events.filter(e=>e.payment!=="Pagado").reduce((s,e)=>s+Number(e.amount||0),0);$("rm").textContent="$"+amount.toLocaleString("es-CL")}
+function summary(){
+  const rt=$("rt");
+  if(rt) rt.textContent=events.length;
+}
 document.addEventListener("input",function(e){
   if((e.target.tagName==="INPUT"&&e.target.type==="text")||e.target.tagName==="TEXTAREA"){
     const inicio=e.target.selectionStart;
