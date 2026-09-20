@@ -1,4 +1,4 @@
-const CACHE = "kichan-agenda-nueva-v3";
+const CACHE = "kichan-agenda-nueva-v4";
 
 const FILES = [
   "./",
