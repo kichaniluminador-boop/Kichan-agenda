@@ -290,10 +290,11 @@ $("backupFile").addEventListener("change", function(){
 
     }catch(error){
 
-      alert(
-        "NO SE PUDO RESTAURAR EL RESPALDO.\n\n" +
-        "Selecciona un archivo de respaldo creado por KICHAN AGENDA."
-      );
+ alert(
+  "ERROR AL RESTAURAR:\n\n" +
+  error.name + "\n" +
+  error.message
+);     
 
     }
 
