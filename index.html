@@ -55,9 +55,32 @@ textarea{height:95px;resize:none}.row{display:grid;grid-template-columns:minmax(
 <section id="summary" class="view">
   <h1>Resumen</h1>
 
-  <div class="panel">
-    <div id="rt"></div>
+<div class="panel">
+  <div class="line">
+    <span>📋 PRESTACIONES</span>
+    <b class="gold" id="rt">0</b>
   </div>
+
+  <div class="line">
+    <span>✅ PAGADAS</span>
+    <b class="gold" id="rp">0</b>
+  </div>
+
+  <div class="line">
+    <span>⏳ PENDIENTES DE PAGO</span>
+    <b class="gold" id="rpend">0</b>
+  </div>
+
+  <div class="line">
+    <span>💰 TOTAL COBRADO</span>
+    <b class="gold" id="rcobrado">$0</b>
+  </div>
+
+  <div class="line">
+    <span>💵 TOTAL POR COBRAR</span>
+    <b class="gold" id="rporcobrar">$0</b>
+  </div>
+</div>
 
   <div class="section">RESPALDO DE SEGURIDAD</div>
 
@@ -191,8 +214,30 @@ function dayClick(date){
   $("ml").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function summary(){
-  const rt=$("rt");
-  if(rt) rt.textContent=events.length;
+  const rt = $("rt");
+  const rp = $("rp");
+  const rpend = $("rpend");
+  const rcobrado = $("rcobrado");
+  const rporcobrar = $("rporcobrar");
+
+  const pagadas = events.filter(e => e.payment === "Pagado");
+  const pendientes = events.filter(e => e.payment !== "Pagado");
+
+  const monto = e => {
+    const n = Number(String(e.amount || 0).replace(/[^\d]/g,""));
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const totalCobrado = pagadas.reduce((s,e) => s + monto(e), 0);
+  const totalPorCobrar = pendientes.reduce((s,e) => s + monto(e), 0);
+
+  const pesos = n => "$" + n.toLocaleString("es-CL");
+
+  if(rt) rt.textContent = events.length;
+  if(rp) rp.textContent = pagadas.length;
+  if(rpend) rpend.textContent = pendientes.length;
+  if(rcobrado) rcobrado.textContent = pesos(totalCobrado);
+  if(rporcobrar) rporcobrar.textContent = pesos(totalPorCobrar);
 }
 document.addEventListener("input",function(e){
   if((e.target.tagName==="INPUT"&&e.target.type==="text")||e.target.tagName==="TEXTAREA"){
