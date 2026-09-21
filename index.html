@@ -354,9 +354,9 @@ $("backupFile").addEventListener("change", function(){
 save();
 render();
 $("pendientesPago").addEventListener("click", function(){
- alert("BOTÓN PENDIENTES FUNCIONA"); 
+  
   const lista = events.filter(e => e.payment !== "Pagado");
-
+alert("PENDIENTES ENCONTRADAS: " + lista.length);
   if (!lista.length) {
     alert("NO HAY PRESTACIONES PENDIENTES DE PAGO");
     return;
