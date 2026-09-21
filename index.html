@@ -66,7 +66,7 @@ textarea{height:95px;resize:none}.row{display:grid;grid-template-columns:minmax(
     <b class="gold" id="rp">0</b>
   </div>
 
-  <div class="line">
+<div class="line" id="pendientesPago" role="button" style="cursor:pointer">
     <span>⏳ PENDIENTES DE PAGO</span>
     <b class="gold" id="rpend">0</b>
   </div>
@@ -353,5 +353,31 @@ $("backupFile").addEventListener("change", function(){
 }); 
 save();
 render();
+$("pendientesPago").addEventListener("click", function(){
+  const lista = events.filter(e => e.payment !== "Pagado");
+
+  if (!lista.length) {
+    alert("NO HAY PRESTACIONES PENDIENTES DE PAGO");
+    return;
+  }
+
+  $("ml").innerHTML =
+    `<div class="section">⏳ PENDIENTES DE PAGO</div>` +
+    lista
+      .sort((a,b) => String(a.date || "").localeCompare(String(b.date || "")))
+      .map(e => `
+        <div class="line">
+          <button type="button" class="link" onclick="edit('${e.id}')">
+            ${esc(e.artist || "SIN ARTISTA")}
+          </button>
+          <b class="gold">$${Number(e.amount || 0).toLocaleString("es-CL")}</b>
+        </div>
+      `).join("") +
+    `<button type="button" class="primary" onclick="view('summary')">
+      ← VOLVER AL RESUMEN
+    </button>`;
+
+  $("ml").scrollIntoView({behavior:"smooth", block:"start"});
+});  
 </script>
 </body></html>
