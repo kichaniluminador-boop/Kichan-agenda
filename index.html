@@ -175,6 +175,29 @@
 .action-sheet-option:active,.action-sheet-cancel:active{transform:scale(.985)}
 .action-sheet-cancel{margin-top:11px;color:#ff8585;background:#1c1c1c}
 
+
+/* V21 CALENDARIO */
+#calendarView .calendar-tools{display:flex;justify-content:center;margin:0 0 10px}
+#calendarView .today-btn{min-width:92px;min-height:38px;border:1px solid var(--gold2);border-radius:13px;background:#201b0f;color:var(--gold);font-size:12px;font-weight:900}
+.day.today{border:2px solid #fff !important;outline:none !important;box-shadow:none !important}
+.day.today.has-event{border:2px solid #fff !important;outline:none !important;box-shadow:none !important}
+.day.selected:not(.today){outline:2px solid var(--gold);outline-offset:2px}
+.calendar-month-list{margin-top:28px}
+.calendar-month-list-title{margin:0 4px 14px;color:var(--muted);font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}
+.calendar-month-list .compact-card{margin-bottom:10px}
+
+
+/* V21.1: Estado y pago visibles en la lista mensual del calendario */
+#calendarMonthEvents .badges{
+  display:flex !important;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:10px 0 8px;
+}
+#calendarMonthEvents .badge{
+  display:inline-flex !important;
+}
+
 </style>
 </head>
 <body>
@@ -217,9 +240,11 @@
 </section>
 <section id="calendarView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Calendario</h1>
+  <div class="calendar-tools"><button id="goTodayBtn" class="today-btn" type="button">HOY</button></div>
   <div class="calendar-box"><div class="calendar-head"><button id="prevMonth" type="button">‹</button><div id="calendarMonth" class="calendar-month"></div><button id="nextMonth" type="button">›</button></div>
   <div class="weekdays"><div class="weekday">L</div><div class="weekday">M</div><div class="weekday">X</div><div class="weekday">J</div><div class="weekday">V</div><div class="weekday">S</div><div class="weekday">D</div></div><div id="calendarGrid" class="calendar-grid"></div></div>
   <div id="selectedDateTitle" class="selected-date-title"></div><button id="selectedAddBtn" class="selected-add" type="button">+ NUEVA PRESTACIÓN ESTE DÍA</button><div id="selectedDateEvents"></div>
+  <section class="calendar-month-list"><div id="calendarMonthListTitle" class="calendar-month-list-title"></div><div id="calendarMonthEvents"></div></section>
 </section>
 <section id="summaryView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Resumen</h1>
@@ -416,7 +441,17 @@ function renderHome(){
  else shown.forEach(e=>c.appendChild(makeCompactCard(e)));
 }
 
-function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(ds===todayString()?" today":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate()}
+function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(ds===todayString()?" today":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate();renderCalendarMonthList()}
+function renderCalendarMonthList(){
+ const y=state.calendarYear,m=state.calendarMonth,key=`${y}-${String(m+1).padStart(2,"0")}`;
+ const a=sortEvents(state.events.filter(e=>e.date.startsWith(key)));
+ const title=$("calendarMonthListTitle"),box=$("calendarMonthEvents");
+ const monthName=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1)).toLocaleUpperCase("es-CL");
+ title.textContent=`${a.length} ${a.length===1?"PRESTACIÓN":"PRESTACIONES"} · ${monthName}`;
+ box.innerHTML="";
+ if(!a.length){box.innerHTML='<div class="empty">No hay prestaciones este mes.</div>';return}
+ a.forEach(e=>box.appendChild(makeCompactCard(e)));
+}
 function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";const add=$("selectedAddBtn");if(!state.selectedDate){t.textContent="Selecciona un día";add.classList.remove("show");return}add.classList.add("show");const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
 function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0))}
 function openSimpleList(filter,title){state.listFilter=filter;state.listReturnView=(filter==="paid"||filter==="pending")?"summary":"home";$("listTitle").textContent=title;showView("list")}
@@ -436,6 +471,11 @@ $("detailBackBtn").onclick=()=>showView(state.detailReturnView||"home");
 $("selectedAddBtn").onclick=()=>openNewForm(state.selectedDate,"calendar");
 $("newEventBtn").onclick=()=>openNewForm("","home");
 $("homeSearch").oninput=renderHome;
+$("goTodayBtn").onclick=()=>{
+ const d=new Date();
+ state.calendarYear=d.getFullYear();state.calendarMonth=d.getMonth();
+ state.selectedDate=todayString();renderCalendar();
+};
 $("prevMonth").onclick=()=>{if(--state.calendarMonth<0){state.calendarMonth=11;state.calendarYear--}state.selectedDate="";renderCalendar()};
 $("nextMonth").onclick=()=>{if(++state.calendarMonth>11){state.calendarMonth=0;state.calendarYear++}state.selectedDate="";renderCalendar()};
 $("date").onchange=updateDatePreview;$("status").onchange=updateReplacementField;
