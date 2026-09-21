@@ -101,6 +101,16 @@
   padding:0 !important;
 }
 
+
+/* CALENDARIO: resaltar claramente el día actual */
+.day.today{
+  outline:2px solid #fff;
+  outline-offset:2px;
+}
+.day.today.has-event{
+  box-shadow:inset 0 0 0 2px #050505;
+}
+
 </style>
 </head>
 <body>
@@ -195,7 +205,7 @@ const link=c.querySelector(".compact-link");if(link)link.onclick=ev=>{ev.stopPro
 const edit=c.querySelector(".edit-btn");if(edit)edit.onclick=()=>openEditForm(e.id,state.view==="calendar"?"calendar":"home");
 return c}
 function renderHome(){const all=state.events,up=sortEvents(all.filter(e=>e.date>=todayString()));$("statTotal").textContent=all.length;$("statConfirmed").textContent=all.filter(e=>e.status==="Confirmado").length;$("statReplacement").textContent=all.filter(e=>e.status==="Reemplazo").length;$("statNext").textContent=up[0]?formatDateWithWeekday(up[0].date).replace(/^(\S+)\s/,"$1\n"):"—";const c=$("upcomingList");c.innerHTML="";if(!up.length){c.innerHTML='<div class="empty">No hay próximas prestaciones.</div>';return}up.forEach(e=>c.appendChild(makeCompactCard(e)))}
-function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate()}
+function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(ds===todayString()?" today":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate()}
 function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";if(!state.selectedDate){t.textContent="Selecciona un día";return}const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
 function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0))}
 function openSimpleList(filter,title){state.listFilter=filter;state.listReturnView=(filter==="paid"||filter==="pending")?"summary":"home";$("listTitle").textContent=title;showView("list")}
