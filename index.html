@@ -112,17 +112,22 @@
 }
 
 
-/* V14 PROFESIONAL */
-.badges{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}
-.badge{display:inline-flex;align-items:center;min-height:25px;padding:4px 9px;border:1px solid #444;border-radius:999px;background:#202020;font-size:10px;font-weight:900;letter-spacing:.4px}
-.badge.confirmado,.badge.pagado{color:#83e7a6}.badge.reemplazo{color:var(--gold)}.badge.por-confirmar,.badge.pendiente{color:#ffd477}.badge.cancelado{color:#ff8585}
-.quick-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.quick-btn{border:1px solid #444;border-radius:12px;background:#242424;color:var(--gold);min-height:36px;padding:6px 10px;font-size:11px;font-weight:900}
-.today-banner{display:none;margin:0 0 18px;padding:15px;border:1px solid var(--gold2);border-radius:18px;background:#15120a}.today-banner.show{display:block}.today-banner-title{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:2px;margin-bottom:6px}.today-banner-main{font-size:17px;font-weight:900}.today-banner-sub{margin-top:6px;color:#c9c9c9;font-size:13px}
-.search-box{margin:0 0 18px}.search-box .control{height:46px;text-align:center}
-.history-btn{width:100%;margin-top:12px;border:1px solid #444;border-radius:16px;background:#202020;color:var(--gold);min-height:46px;font-weight:900}
-.calendar-tools{display:flex;justify-content:center;margin:0 0 12px}.today-btn{border:1px solid var(--gold2);border-radius:13px;background:#201b0f;color:var(--gold);padding:7px 16px;font-size:12px;font-weight:900}
-.month-summary{margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:20px;background:var(--card)}.month-summary-title{color:var(--gold);font-weight:900;text-align:center;margin-bottom:12px}.month-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.month-mini{padding:10px;border-radius:13px;background:#0d0d0d;text-align:center}.month-mini strong{display:block;color:var(--gold);font-size:17px}.month-mini span{font-size:9px;color:var(--muted);text-transform:uppercase}
-.modal{display:none;position:fixed;z-index:500;inset:0;background:rgba(0,0,0,.72);align-items:flex-end;justify-content:center;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}.modal.show{display:flex}.sheet{width:min(100%,430px);background:#171717;border:1px solid #444;border-radius:24px;padding:18px}.sheet-title{text-align:center;color:var(--gold);font-weight:900;margin:0 0 14px}.sheet-buttons{display:grid;gap:9px}.sheet-btn{min-height:48px;border:1px solid #444;border-radius:15px;background:#252525;color:#fff;font-weight:800}.sheet-btn.cancel{color:#ff8585}
+/* V15 COMPACTA */
+.app{padding-top:calc(env(safe-area-inset-top) + 6px)}
+.brand{margin:2px 0 6px;font-size:0;letter-spacing:0;line-height:1}
+.brand:before{content:"KICHAN";display:block;color:var(--gold);font-size:21px;font-weight:950;letter-spacing:5px}
+.brand:after{content:"ILUMINADOR · DISEÑO Y PROGRAMACIÓN";display:block;margin-top:4px;color:var(--gold2);font-size:8px;font-weight:850;letter-spacing:1.6px}
+.page-title{margin:0 0 15px;font-size:28px;line-height:1;letter-spacing:-.6px}
+.home-main{margin-top:7px}
+#calendarView .page-title,#summaryView .page-title,#settingsView .page-title{margin-bottom:13px}
+#calendarView .calendar-tools{margin-bottom:8px}
+#summaryView .month-summary{margin-top:14px}
+.next-hero{position:relative;overflow:hidden;margin-bottom:12px;border:1px solid var(--gold2);border-radius:23px;padding:14px 15px;background:linear-gradient(90deg,rgba(5,5,5,.94),rgba(5,5,5,.70)),radial-gradient(circle at 78% 30%,rgba(239,189,55,.28),transparent 25%),#111;cursor:pointer}
+.next-hero:before{content:"";position:absolute;inset:0;opacity:.22;background:linear-gradient(115deg,transparent 52%,rgba(239,189,55,.35) 54%,transparent 57%),linear-gradient(68deg,transparent 63%,rgba(255,255,255,.16) 65%,transparent 68%);pointer-events:none}
+.next-hero>*{position:relative}.next-label{color:var(--gold);font-size:16px;font-weight:950;margin-bottom:8px}.next-main{display:grid;grid-template-columns:72px 1fr 32px;gap:10px;align-items:center}.next-datebox{padding:8px 4px;border-radius:14px;background:rgba(0,0,0,.48);text-align:center}.next-dayname,.next-month{color:var(--gold);font-size:11px;font-weight:900}.next-daynum{font-size:36px;font-weight:950;line-height:1}.next-info{min-width:0}.next-artist{font-size:21px;font-weight:950;line-height:1.08;margin-bottom:7px}.next-place,.next-meeting{font-size:14px;line-height:1.22;margin-top:5px}.next-meeting{color:#d0d0d0}.next-arrow{width:32px;height:32px;border:0;border-radius:50%;background:var(--gold);color:#050505;font-size:24px;font-weight:900;padding:0}.next-times{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.18)}.next-time{text-align:center;color:#aaa;font-size:10px}.next-time strong{display:block;color:#fff;font-size:16px;margin-bottom:2px}
+#homeView .stats{margin-bottom:12px}#homeView .stat{padding:10px 3px}#homeView .primary{padding:15px 12px;border-radius:18px}#homeView .section-title{margin:20px 5px 12px}#homeView .search-box{margin-bottom:12px}
+.selected-add{display:none;width:100%;margin:0 0 12px;border:0;border-radius:16px;background:var(--gold);color:#080808;min-height:46px;font-weight:950;font-size:14px}.selected-add.show{display:block}
+.detail-card{position:relative;overflow:hidden;border:1px solid var(--gold2);border-radius:23px;background:var(--card);padding:16px}.detail-card:before{content:"";position:absolute;inset:0;opacity:.16;background:radial-gradient(circle at 75% 8%,rgba(239,189,55,.6),transparent 25%),linear-gradient(120deg,transparent 45%,rgba(255,255,255,.13) 47%,transparent 50%);pointer-events:none}.detail-card>*{position:relative}.detail-date{color:var(--gold);font-weight:900;font-size:14px}.detail-title{font-size:26px;line-height:1.05;margin:6px 0 12px}.detail-times{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:11px 0;border-top:1px solid #333;border-bottom:1px solid #333}.detail-time{text-align:center;color:#aaa;font-size:10px}.detail-time strong{display:block;color:#fff;font-size:18px}.detail-row{padding:12px 2px;border-bottom:1px solid #2d2d2d;font-size:14px;line-height:1.35}.detail-row strong{display:block;color:#fff;font-size:15px;margin-bottom:2px}.detail-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}.detail-btn{min-height:44px;border:1px solid #444;border-radius:14px;background:#242424;color:var(--gold);font-weight:900;font-size:12px}.detail-back{margin:0 0 9px;border:0;background:transparent;color:var(--gold);font-weight:900;padding:4px 0}
 
 </style>
 </head>
@@ -130,7 +135,7 @@
 <main class="app">
 <section id="homeView" class="view active">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Agenda</h1>
-  <div id="todayBanner" class="today-banner"></div><div class="home-main">
+  <div class="home-main">
     <div class="stats">
       <div id="totalCard" class="stat clickable"><div id="statTotal" class="stat-number">0</div><div class="stat-label">Prestaciones</div></div>
       <div id="confirmedCard" class="stat clickable"><div id="statConfirmed" class="stat-number">0</div><div class="stat-label">Confirmadas</div></div>
@@ -139,16 +144,13 @@
     </div>
     <button id="newEventBtn" class="primary">+ NUEVA PRESTACIÓN</button>
   </div>
-  <div class="section-title">Próximas prestaciones</div>
-<div class="search-box"><input id="homeSearch" class="control" type="search" placeholder="🔍 Buscar artista, localidad o fecha"></div>
-<div id="upcomingList"></div>
-<button id="historyBtn" class="history-btn" type="button">🕘 HISTORIAL</button>
+  <div class="section-title">Próximas prestaciones</div><div id="upcomingList"></div>
 </section>
 <section id="calendarView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Calendario</h1>
-  <div class="calendar-tools"><button id="goTodayBtn" class="today-btn" type="button">HOY</button></div><div class="calendar-box"><div class="calendar-head"><button id="prevMonth" type="button">‹</button><div id="calendarMonth" class="calendar-month"></div><button id="nextMonth" type="button">›</button></div>
+  <div class="calendar-box"><div class="calendar-head"><button id="prevMonth" type="button">‹</button><div id="calendarMonth" class="calendar-month"></div><button id="nextMonth" type="button">›</button></div>
   <div class="weekdays"><div class="weekday">L</div><div class="weekday">M</div><div class="weekday">X</div><div class="weekday">J</div><div class="weekday">V</div><div class="weekday">S</div><div class="weekday">D</div></div><div id="calendarGrid" class="calendar-grid"></div></div>
-  <div id="selectedDateTitle" class="selected-date-title"></div><div id="selectedDateEvents"></div>
+  <div id="selectedDateTitle" class="selected-date-title"></div><button id="selectedAddBtn" class="selected-add" type="button">+ NUEVA PRESTACIÓN ESTE DÍA</button><div id="selectedDateEvents"></div>
 </section>
 <section id="summaryView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Resumen</h1>
@@ -157,15 +159,6 @@
     <div id="pendingCard" class="summary-card clickable"><div id="sumPending" class="summary-number">0</div><div class="summary-label">Pendientes</div><div class="summary-hint">VER LISTA</div></div>
     <div class="summary-card full"><div id="sumPaidMoney" class="summary-number">$0</div><div class="summary-label">Total pagado</div></div>
     <div class="summary-card full"><div id="sumPendingMoney" class="summary-number">$0</div><div class="summary-label">Por cobrar</div></div>
-  </div>
-  <div class="month-summary">
-    <div id="monthSummaryTitle" class="month-summary-title">Resumen mensual</div>
-    <div class="month-summary-grid">
-      <div class="month-mini"><strong id="monthCount">0</strong><span>Prestaciones</span></div>
-      <div class="month-mini"><strong id="monthPaid">0</strong><span>Pagadas</span></div>
-      <div class="month-mini"><strong id="monthPending">0</strong><span>Pendientes</span></div>
-      <div class="month-mini"><strong id="monthMoney">$0</strong><span>Total mes</span></div>
-    </div>
   </div>
 </section>
 <section id="settingsView" class="view">
@@ -181,6 +174,11 @@
   <div class="brand">KICHAN ILUMINADOR</div><h1 id="listTitle" class="page-title">Lista</h1>
   <div class="list-top"><button id="backListBtn" class="back-list" type="button">← VOLVER</button></div><div class="list-note">Toca una prestación para editarla</div>
   <div id="simpleList" class="simple-list"></div>
+</section>
+<section id="detailView" class="view">
+<div class="brand">KICHAN ILUMINADOR</div>
+<button id="detailBackBtn" class="detail-back" type="button">← VOLVER</button>
+<div id="detailContent"></div>
 </section>
 <section id="formView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 id="formTitle" class="page-title">Nueva prestación</h1>
@@ -199,7 +197,6 @@
   </form>
 </section>
 </main>
-<div id="choiceModal" class="modal"><div class="sheet"><div id="sheetTitle" class="sheet-title"></div><div id="sheetButtons" class="sheet-buttons"></div></div></div>
 <nav id="bottomNav" class="bottom-nav">
 <button class="nav-btn active" data-view="home" type="button"><span>⌂</span>Inicio</button>
 <button class="nav-btn" data-view="calendar" type="button"><span>▣</span>Calendario</button>
@@ -209,7 +206,7 @@
 <script>
 "use strict";
 const STORAGE_KEY="kichan-agenda-clean-v1";
-const state={events:[],view:"home",editingId:null,returnView:"home",selectedDate:"",calendarYear:new Date().getFullYear(),calendarMonth:new Date().getMonth(),listFilter:""};
+const state={events:[],view:"home",editingId:null,returnView:"home",selectedDate:"",calendarYear:new Date().getFullYear(),calendarMonth:new Date().getMonth(),listFilter:"",detailId:null,detailReturnView:"home"};
 const $=id=>document.getElementById(id);
 const cleanText=v=>String(v??"").trim();
 const upperText=v=>cleanText(v).toLocaleUpperCase("es-CL");
@@ -224,68 +221,25 @@ function normalizeEvent(r){if(!r||typeof r!=="object")return null;const date=nor
 function sortEvents(a){return a.slice().sort((x,y)=>x.date.localeCompare(y.date)||(x.show||x.departure||"99:99").localeCompare(y.show||y.departure||"99:99"))}
 function loadEvents(){try{const r=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");return Array.isArray(r)?sortEvents(r.map(normalizeEvent).filter(Boolean)):[]}catch{return[]}}
 function saveEvents(){state.events=sortEvents(state.events);localStorage.setItem(STORAGE_KEY,JSON.stringify(state.events))}
-function showView(view){state.view=view;document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));const t=$(view+"View");if(t)t.classList.add("active");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));$("bottomNav").style.display=view==="form"?"none":"grid";if(view==="home")renderHome();if(view==="calendar")renderCalendar();if(view==="summary")renderSummary();if(view==="list")renderSimpleList();window.scrollTo(0,0)}
+function showView(view){state.view=view;document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));const t=$(view+"View");if(t)t.classList.add("active");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));$("bottomNav").style.display=view==="form"?"none":"grid";if(view==="home")renderHome();if(view==="calendar")renderCalendar();if(view==="summary")renderSummary();if(view==="list")renderSimpleList();if(view==="detail")renderDetail();window.scrollTo(0,0)}
 function todayString(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function makeCompactCard(e,editable=true){const c=document.createElement("article");c.className="compact-card";c.innerHTML=`<div class="compact-date">${formatDateWithWeekday(e.date)}</div><h3 class="compact-title">${e.artist}</h3>${e.place?`<div class="compact-line">📍 ${e.place} <button class="compact-link" type="button">Cómo llegar</button></div>`:""}${e.meeting?`<div class="compact-line">Punto de encuentro: ${e.meeting}</div>`:""}<div class="compact-line muted">${e.departure?`🚌 ${e.departure}`:""} ${e.test?`🎚️ ${e.test}`:""} ${e.show?`🎤 ${e.show}`:""}</div>${e.status==="Reemplazo"&&e.replacementPerson?`<div class="compact-line">👤 <strong>REEMPLAZA: ${e.replacementPerson}</strong></div>`:""}${e.contact?`<div class="compact-line">Contacto: ${e.contact}</div>`:""}${e.phone?`<div class="compact-line"><a style="color:var(--gold);text-decoration:none" href="tel:${e.phone.replace(/[^\d+]/g,"")}">📞 Llamar</a></div>`:""}${e.notes?`<div class="compact-notes">📝 ${e.notes}</div>`:""}${editable?`<div class="compact-actions"><button class="compact-action edit-btn" type="button">✏️ EDITAR</button></div>`:""}`;
+const link=c.querySelector(".compact-link");if(link)link.onclick=ev=>{ev.stopPropagation();window.open("https://maps.apple.com/?q="+encodeURIComponent(e.place),"_blank")};
+const edit=c.querySelector(".edit-btn");if(edit)edit.onclick=()=>openEditForm(e.id,state.view==="calendar"?"calendar":"home");
+return c}
 
-function safeClass(v){return cleanText(v).toLocaleLowerCase("es-CL").replace(/\s+/g,"-")}
-function showSheet(title,items){$("sheetTitle").textContent=title;const box=$("sheetButtons");box.innerHTML="";items.forEach(x=>{const b=document.createElement("button");b.type="button";b.className="sheet-btn"+(x.cancel?" cancel":"");b.textContent=x.label;b.onclick=()=>{closeSheet();if(x.action)x.action()};box.appendChild(b)});$("choiceModal").classList.add("show")}
-function closeSheet(){$("choiceModal").classList.remove("show")}
-function openMapsChoice(place){
- const q=encodeURIComponent(place);
- showSheet("¿CÓMO LLEGAR?",[
-  {label:" MAPAS DE APPLE",action:()=>window.location.href="https://maps.apple.com/?q="+q},
-  {label:"WAZE",action:()=>window.location.href="https://waze.com/ul?q="+q+"&navigate=yes"},
-  {label:"GOOGLE MAPS",action:()=>window.location.href="https://www.google.com/maps/search/?api=1&query="+q},
-  {label:"CANCELAR",cancel:true}
- ])
-}
-function phoneDigits(v){let d=String(v||"").replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===9)d="56"+d;return d}
-function openContactChoice(phone){
- const d=phoneDigits(phone);
- showSheet("CONTACTO",[
-  {label:"📞 LLAMAR",action:()=>window.location.href="tel:+"+d},
-  {label:"💬 WHATSAPP",action:()=>window.location.href="https://wa.me/"+d},
-  {label:"CANCELAR",cancel:true}
- ])
-}
-function shareEvent(e){
- const lines=[e.artist,formatDateWithWeekday(e.date),e.place?("📍 "+e.place):"",e.meeting?("📌 Punto de encuentro: "+e.meeting):"",e.departure?("🚌 Salida: "+e.departure):"",e.test?("🎚️ Prueba: "+e.test):"",e.show?("🎤 Show: "+e.show):"",e.status==="Reemplazo"&&e.replacementPerson?("👤 Reemplaza: "+e.replacementPerson):"",e.notes?("📝 "+e.notes):""].filter(Boolean);
- const txt=lines.join("\n");if(navigator.share)navigator.share({title:"Kichan Agenda",text:txt}).catch(()=>{});else{navigator.clipboard?.writeText(txt);alert("Prestación copiada.")}
-}
-function makeCompactCard(e,editable=true){
- const c=document.createElement("article");c.className="compact-card";
- c.innerHTML=`<div class="compact-date">${formatDateWithWeekday(e.date)}</div><h3 class="compact-title">${e.artist}</h3>
- <div class="badges"><span class="badge ${safeClass(e.status)}">${e.status.toLocaleUpperCase("es-CL")}</span><span class="badge ${safeClass(e.payment)}">${e.payment.toLocaleUpperCase("es-CL")}</span></div>
- ${e.place?`<div class="compact-line">📍 ${e.place}</div>`:""}${e.meeting?`<div class="compact-line">📌 Punto de encuentro: ${e.meeting}</div>`:""}
- ${(e.departure||e.test||e.show)?`<div class="compact-line muted">${e.departure?`🚌 Salida ${e.departure}`:""} ${e.test?`🎚️ Prueba ${e.test}`:""} ${e.show?`🎤 Show ${e.show}`:""}</div>`:""}
- ${e.status==="Reemplazo"&&e.replacementPerson?`<div class="compact-line">👤 <strong>REEMPLAZA: ${e.replacementPerson}</strong></div>`:""}
- ${e.contact?`<div class="compact-line">👤 Contacto: ${e.contact}</div>`:""}${e.notes?`<div class="compact-notes">📝 ${e.notes}</div>`:""}
- <div class="quick-actions">${e.place?`<button class="quick-btn map-btn" type="button">📍 CÓMO LLEGAR</button>`:""}${e.phone?`<button class="quick-btn phone-btn" type="button">📱 CONTACTO</button>`:""}<button class="quick-btn share-btn" type="button">↗ COMPARTIR</button>${editable?`<button class="quick-btn edit-btn" type="button">✏️ EDITAR</button>`:""}</div>`;
- const map=c.querySelector(".map-btn");if(map)map.onclick=ev=>{ev.stopPropagation();openMapsChoice(e.place)};
- const ph=c.querySelector(".phone-btn");if(ph)ph.onclick=ev=>{ev.stopPropagation();openContactChoice(e.phone)};
- const sh=c.querySelector(".share-btn");if(sh)sh.onclick=ev=>{ev.stopPropagation();shareEvent(e)};
- const edit=c.querySelector(".edit-btn");if(edit)edit.onclick=()=>openEditForm(e.id,state.view==="calendar"?"calendar":"home");
- return c
-}
+function shortDateParts(date){const d=parseLocalDate(date);if(!d)return{wd:"",day:"",mon:""};return{wd:new Intl.DateTimeFormat("es-CL",{weekday:"short"}).format(d).replace(".","").toLocaleUpperCase("es-CL"),day:String(d.getDate()).padStart(2,"0"),mon:new Intl.DateTimeFormat("es-CL",{month:"short"}).format(d).replace(".","").toLocaleUpperCase("es-CL")}}
+function renderNextHero(){const box=$("nextHero"),n=sortEvents(state.events.filter(e=>e.date>=todayString()))[0];if(!n){box.innerHTML="";return}const p=shortDateParts(n.date);box.innerHTML=`<article class="next-hero"><div class="next-label">Próximo</div><div class="next-main"><div class="next-datebox"><div class="next-dayname">${p.wd}</div><div class="next-daynum">${p.day}</div><div class="next-month">${p.mon}</div></div><div class="next-info"><div class="next-artist">${n.artist}</div>${n.place?`<div class="next-place">📍 ${n.place}</div>`:""}${n.meeting?`<div class="next-meeting">👥 ${n.meeting}<br><small>Lugar de encuentro</small></div>`:""}</div><button class="next-arrow" type="button">›</button></div><div class="next-times"><div class="next-time"><strong>${n.departure||"—"}</strong>🚌 Salida</div><div class="next-time"><strong>${n.test||"—"}</strong>🎚️ Prueba</div><div class="next-time"><strong>${n.show||"—"}</strong>🎤 Show</div></div></article>`;box.querySelector(".next-hero").onclick=()=>openDetail(n.id,"home")}
+function openDetail(id,ret="home"){state.detailId=id;state.detailReturnView=ret;showView("detail")}
+function renderDetail(){const e=state.events.find(x=>String(x.id)===String(state.detailId)),c=$("detailContent");if(!e){c.innerHTML='<div class="empty">No se encontró la prestación.</div>';return}c.innerHTML=`<article class="detail-card"><div class="detail-date">${formatDateWithWeekday(e.date)}</div><h2 class="detail-title">${e.artist}</h2><div class="badges"><span class="badge ${safeClass(e.status)}">${e.status.toLocaleUpperCase("es-CL")}</span><span class="badge ${safeClass(e.payment)}">${e.payment.toLocaleUpperCase("es-CL")}</span></div><div class="detail-times"><div class="detail-time"><strong>${e.departure||"—"}</strong>🚌 Salida</div><div class="detail-time"><strong>${e.test||"—"}</strong>🎚️ Prueba</div><div class="detail-time"><strong>${e.show||"—"}</strong>🎤 Show</div></div>${e.place?`<div class="detail-row">📍 <strong>Lugar del evento</strong>${e.place}</div>`:""}${e.meeting?`<div class="detail-row">👥 <strong>Lugar de encuentro</strong>${e.meeting}</div>`:""}${e.status==="Reemplazo"&&e.replacementPerson?`<div class="detail-row">👤 <strong>Reemplaza</strong>${e.replacementPerson}</div>`:""}${(e.contact||e.phone)?`<div class="detail-row">📱 <strong>Contacto</strong>${e.contact||""}${e.phone?`<br>${e.phone}`:""}</div>`:""}${e.notes?`<div class="detail-row">📝 <strong>Notas</strong>${e.notes}</div>`:""}<div class="detail-actions">${e.place?`<button id="detailMap" class="detail-btn">📍 CÓMO LLEGAR</button>`:""}${e.phone?`<button id="detailContact" class="detail-btn">📱 CONTACTO</button>`:""}<button id="detailShare" class="detail-btn">↗ COMPARTIR</button><button id="detailEdit" class="detail-btn">✏️ EDITAR</button></div></article>`;if($("detailMap"))$("detailMap").onclick=()=>openMapsChoice(e.place);if($("detailContact"))$("detailContact").onclick=()=>openContactChoice(e.phone);$("detailShare").onclick=()=>shareEvent(e);$("detailEdit").onclick=()=>openEditForm(e.id,"detail")}
+
 function renderHome(){
- const all=state.events,up=sortEvents(all.filter(e=>e.date>=todayString()));
- $("statTotal").textContent=all.length;$("statConfirmed").textContent=all.filter(e=>e.status==="Confirmado").length;$("statReplacement").textContent=all.filter(e=>e.status==="Reemplazo").length;
- $("statNext").textContent=up[0]?formatDateWithWeekday(up[0].date).replace(/^(\S+)\s/,"$1\n"):"—";
- const today=sortEvents(all.filter(e=>e.date===todayString())),bn=$("todayBanner");
- if(today.length){const e=today[0];bn.className="today-banner show";bn.innerHTML=`<div class="today-banner-title">HOY${today.length>1?` · ${today.length} PRESTACIONES`:""}</div><div class="today-banner-main">${e.artist}${e.place?` · ${e.place}`:""}</div><div class="today-banner-sub">${e.show?`🎤 SHOW ${e.show}`:e.departure?`🚌 SALIDA ${e.departure}`:""}</div>`}else{bn.className="today-banner";bn.innerHTML=""}
- const q=upperText($("homeSearch")?.value||"");let shown=up;
- if(q)shown=up.filter(e=>(e.artist+" "+e.place+" "+formatDateWithWeekday(e.date)).toLocaleUpperCase("es-CL").includes(q));
- const c=$("upcomingList");c.innerHTML="";if(!shown.length){c.innerHTML='<div class="empty">No hay prestaciones para mostrar.</div>';return}shown.forEach(e=>c.appendChild(makeCompactCard(e)))
-}
+ renderNextHero();const all=state.events,up=sortEvents(all.filter(e=>e.date>=todayString()));$("statTotal").textContent=all.length;$("statConfirmed").textContent=all.filter(e=>e.status==="Confirmado").length;$("statReplacement").textContent=all.filter(e=>e.status==="Reemplazo").length;$("statNext").textContent=up[0]?formatDateWithWeekday(up[0].date).replace(/^(\S+)\s/,"$1\n"):"—";const c=$("upcomingList");c.innerHTML="";if(!up.length){c.innerHTML='<div class="empty">No hay próximas prestaciones.</div>';return}up.forEach(e=>c.appendChild(makeCompactCard(e)))}
 function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(ds===todayString()?" today":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate()}
-function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";if(!state.selectedDate){t.textContent="Selecciona un día";return}const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
-function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0));
- const now=new Date(),key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`,month=state.events.filter(e=>e.date.startsWith(key));
- $("monthSummaryTitle").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(now).toLocaleUpperCase("es-CL");
- $("monthCount").textContent=month.length;$("monthPaid").textContent=month.filter(e=>e.payment==="Pagado").length;$("monthPending").textContent=month.filter(e=>e.payment!=="Pagado").length;$("monthMoney").textContent=formatMoney(month.reduce((a,e)=>a+e.amount,0))
-}
+function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";const add=$("selectedAddBtn");if(!state.selectedDate){t.textContent="Selecciona un día";add.classList.remove("show");return}add.classList.add("show");const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
+function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0))}
 function openSimpleList(filter,title){state.listFilter=filter;state.listReturnView=(filter==="paid"||filter==="pending")?"summary":"home";$("listTitle").textContent=title;showView("list")}
-function renderSimpleList(){const f=state.listFilter;let a=state.events;if(f==="confirmed")a=a.filter(e=>e.status==="Confirmado");if(f==="replacement")a=a.filter(e=>e.status==="Reemplazo");if(f==="paid")a=a.filter(e=>e.payment==="Pagado");if(f==="pending")a=a.filter(e=>e.payment!=="Pagado");if(f==="history")a=a.filter(e=>e.date<todayString()).sort((x,y)=>y.date.localeCompare(x.date));const c=$("simpleList");c.innerHTML="";const detailed=(f==="all"||f==="confirmed"||f==="replacement"||f==="history");sortEvents(a).forEach(e=>{if(detailed){const card=makeCompactCard(e,false);card.style.cursor="pointer";card.onclick=ev=>{if(ev.target.closest(".compact-link")||ev.target.closest("a"))return;openEditForm(e.id,"list")};c.appendChild(card)}else{const b=document.createElement("button");b.type="button";b.className="simple-item";b.innerHTML=`<strong>${e.artist}</strong>${e.place?`<div style="margin:6px 0;color:#d0d0d0;font-size:14px">📍 ${e.place}</div>`:""}<span>📅 ${formatDateWithWeekday(e.date)}</span>`;b.onclick=()=>openEditForm(e.id,"list");c.appendChild(b)}});if(!a.length)c.innerHTML='<div class="empty">No hay prestaciones en esta lista.</div>'}
+function renderSimpleList(){const f=state.listFilter;let a=state.events;if(f==="confirmed")a=a.filter(e=>e.status==="Confirmado");if(f==="replacement")a=a.filter(e=>e.status==="Reemplazo");if(f==="paid")a=a.filter(e=>e.payment==="Pagado");if(f==="pending")a=a.filter(e=>e.payment!=="Pagado");const c=$("simpleList");c.innerHTML="";const detailed=(f==="all"||f==="confirmed"||f==="replacement");sortEvents(a).forEach(e=>{if(detailed){const card=makeCompactCard(e,false);card.style.cursor="pointer";card.onclick=ev=>{if(ev.target.closest(".compact-link")||ev.target.closest("a"))return;openEditForm(e.id,"list")};c.appendChild(card)}else{const b=document.createElement("button");b.type="button";b.className="simple-item";b.innerHTML=`<strong>${e.artist}</strong>${e.place?`<div style="margin:6px 0;color:#d0d0d0;font-size:14px">📍 ${e.place}</div>`:""}<span>📅 ${formatDateWithWeekday(e.date)}</span>`;b.onclick=()=>openEditForm(e.id,"list");c.appendChild(b)}});if(!a.length)c.innerHTML='<div class="empty">No hay prestaciones en esta lista.</div>'}
 function clearForm(){$("eventForm").reset();$("status").value="Confirmado";$("payment").value="Pendiente";$("datePreview").textContent="";$("amount").value="";updateReplacementField()}
 function openNewForm(date="",ret="home"){state.editingId=null;state.returnView=ret;clearForm();$("formTitle").textContent="Nueva prestación";if(date){$("date").value=date;updateDatePreview()}showView("form")}
 function openEditForm(id,ret="home"){const e=state.events.find(x=>String(x.id)===String(id));if(!e)return;state.editingId=e.id;state.returnView=ret;$("formTitle").textContent="Editar prestación";["date","artist","place","meeting","departure","test","show","contact","phone","status","payment","replacementPerson","notes"].forEach(k=>$(k).value=e[k]||"");$("amount").value=formatAmountInput(e.amount);updateReplacementField();updateDatePreview();showView("form")}
@@ -297,19 +251,16 @@ function clearAgenda(){if(confirm("¿Seguro que quieres dejar la agenda en 0?\n\
 function renderAll(){renderHome();renderCalendar();renderSummary()}
 document.querySelectorAll(".nav-btn").forEach(b=>b.onclick=()=>showView(b.dataset.view));
 $("backListBtn").onclick=()=>showView(state.listReturnView||"home");
+$("detailBackBtn").onclick=()=>showView(state.detailReturnView||"home");
+$("selectedAddBtn").onclick=()=>openNewForm(state.selectedDate,"calendar");
 $("newEventBtn").onclick=()=>openNewForm("","home");
-$("homeSearch").oninput=renderHome;
-$("historyBtn").onclick=()=>openSimpleList("history","Historial","home");
-$("goTodayBtn").onclick=()=>{const d=new Date();state.calendarYear=d.getFullYear();state.calendarMonth=d.getMonth();state.selectedDate=todayString();renderCalendar()};
-$("choiceModal").onclick=e=>{if(e.target===$("choiceModal"))closeSheet()};
-
 $("prevMonth").onclick=()=>{if(--state.calendarMonth<0){state.calendarMonth=11;state.calendarYear--}state.selectedDate="";renderCalendar()};
 $("nextMonth").onclick=()=>{if(++state.calendarMonth>11){state.calendarMonth=0;state.calendarYear++}state.selectedDate="";renderCalendar()};
 $("date").onchange=updateDatePreview;$("status").onchange=updateReplacementField;
 ["artist","place","meeting","contact","replacementPerson","notes"].forEach(id=>$(id).addEventListener("input",e=>{const s=e.target.selectionStart;e.target.value=e.target.value.toLocaleUpperCase("es-CL");try{e.target.setSelectionRange(s,s)}catch{}}));
 $("amount").oninput=()=>{const d=$("amount").value.replace(/\D/g,"");$("amount").value=d?new Intl.NumberFormat("es-CL").format(+d):""};
 $("eventForm").onsubmit=saveForm;$("cancelFormBtn").onclick=()=>{state.editingId=null;showView(state.returnView||"home")};
-$("totalCard").onclick=()=>openSimpleList("all","Prestaciones");$("confirmedCard").onclick=()=>openSimpleList("confirmed","Confirmadas");$("replacementCard").onclick=()=>openSimpleList("replacement","Reemplazos");$("nextCard").onclick=()=>{const n=sortEvents(state.events.filter(e=>e.date>=todayString()))[0];if(n)openEditForm(n.id,"home")};
+$("totalCard").onclick=()=>openSimpleList("all","Prestaciones");$("confirmedCard").onclick=()=>openSimpleList("confirmed","Confirmadas");$("replacementCard").onclick=()=>openSimpleList("replacement","Reemplazos");$("nextCard").onclick=()=>{const n=sortEvents(state.events.filter(e=>e.date>=todayString()))[0];if(n)openDetail(n.id,"home")};
 $("paidCard").onclick=()=>openSimpleList("paid","Pagadas");$("pendingCard").onclick=()=>openSimpleList("pending","Pendientes");
 $("exportBtn").onclick=exportBackup;$("importBtn").onclick=()=>$("importFile").click();$("importFile").onchange=()=>importBackup($("importFile").files[0]);$("clearAgendaBtn").onclick=clearAgenda;
 state.events=loadEvents();renderAll();showView("home");
