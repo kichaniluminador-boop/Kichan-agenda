@@ -182,7 +182,7 @@
 .day.today{border:2px solid #fff !important;outline:none !important;box-shadow:none !important}
 .day.today.has-event{border:2px solid #fff !important;outline:none !important;box-shadow:none !important}
 .day.selected:not(.today){outline:2px solid var(--gold);outline-offset:2px}
-.calendar-month-list{margin-top:28px}
+.calendar-month-list{margin-top:22px;padding-bottom:130px}
 .calendar-month-list-title{margin:0 4px 14px;color:var(--muted);font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}
 .calendar-month-list .compact-card{margin-bottom:10px}
 
@@ -194,6 +194,9 @@
   gap:7px;
   margin:10px 0 8px;
 }
+#calendarMonthEvents{display:block!important;min-height:1px}
+#calendarMonthEvents .compact-card{display:block!important;visibility:visible!important;opacity:1!important;margin:0 0 14px!important}
+#calendarMonthEvents .calendar-first-card{margin-top:4px!important}
 #calendarMonthEvents .badge{
   display:inline-flex !important;
 }
@@ -507,7 +510,13 @@ function renderCalendarMonthList(){
  title.textContent=`${a.length} ${a.length===1?"PRESTACIÓN":"PRESTACIONES"} · ${monthName}`;
  box.innerHTML="";
  if(!a.length){box.innerHTML='<div class="empty">No hay prestaciones este mes.</div>';return}
- a.forEach(e=>box.appendChild(makeCompactCard(e)));
+ a.forEach(e=>{
+  const card=makeCompactCard(e);
+  card.classList.add("calendar-month-card");
+  box.appendChild(card);
+ });
+ // Lleva la lista mensual a una zona visible cuando no hay un día seleccionado.
+ if(!state.selectedDate && a.length) box.firstElementChild?.classList.add("calendar-first-card");
 }
 function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";const add=$("selectedAddBtn");if(!state.selectedDate){t.textContent="Selecciona un día";add.classList.remove("show");return}add.classList.add("show");const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
 function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0))}
