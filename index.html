@@ -232,6 +232,35 @@
   border-radius:50%;
 }
 
+
+/* V23: estado de la próxima prestación arriba a la derecha */
+.next-hero-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.next-hero-head .next-label{margin-bottom:0}
+.next-status{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:5px 10px;border-radius:999px;border:1px solid currentColor;font-size:10px;font-weight:950;letter-spacing:.5px;background:rgba(0,0,0,.38);white-space:nowrap}
+.next-status.confirmado{color:#35c66b}
+.next-status.pendiente{color:#efbd37}
+.next-status.reemplazo{color:#63b3ff}
+.next-status.cancelado{color:#ff6b6b}
+
+
+/* V24: listas mensuales visibles en Inicio y Calendario */
+#upcomingList,
+#calendarMonthEvents{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+#upcomingList .compact-card,
+#calendarMonthEvents .compact-card{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+#homeMonthListTitle{
+  margin-top:22px;
+  margin-bottom:14px;
+}
+
 </style>
 </head>
 <body>
@@ -240,7 +269,7 @@
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Agenda</h1>
   <div class="home-main">
     <article id="nextHeroCard" class="next-hero" style="display:none" role="button" tabindex="0">
-      <div class="next-label">Próximo</div>
+      <div class="next-hero-head"><div class="next-label">Próximo</div><div id="nextHeroStatus" class="next-status confirmado">CONFIRMADO</div></div>
       <div class="next-main">
         <div class="next-datebox">
           <div id="nextHeroWeekday" class="next-dayname"></div>
@@ -270,7 +299,7 @@
     <button id="newEventBtn" class="primary">+ NUEVA PRESTACIÓN</button>
   </div>
   <div class="search-box"><input id="homeSearch" class="control" type="search" placeholder="🔍 Buscar artista, localidad o fecha"></div>
-  <div class="section-title">Próximas prestaciones</div><div id="upcomingList"></div>
+  <div id="homeMonthListTitle" class="section-title">Prestaciones del mes</div><div id="upcomingList"></div>
 </section>
 <section id="calendarView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 class="page-title">Calendario</h1>
@@ -408,8 +437,11 @@ function renderNextHero(){
  $("nextHeroPlace").innerHTML=n.place?"📍 "+n.place:"";
  $("nextHeroMeeting").innerHTML=n.meeting?"🗺️ "+n.meeting:"";
  $("nextHeroDeparture").textContent=n.departure||"—";$("nextHeroTest").textContent=n.test||"—";$("nextHeroShow").textContent=n.show||"—";
+ const statusLabel=n.status==="Por confirmar"?"PENDIENTE":n.status.toLocaleUpperCase("es-CL");
+ const statusClass=n.status==="Confirmado"?"confirmado":n.status==="Reemplazo"?"reemplazo":n.status==="Cancelado"?"cancelado":"pendiente";
+ $("nextHeroStatus").textContent=statusLabel;$("nextHeroStatus").className="next-status "+statusClass;
  const x=[];
- x.push(`<div class="next-badges"><span class="next-badge">${n.status.toLocaleUpperCase("es-CL")}</span><span class="next-badge">${n.payment.toLocaleUpperCase("es-CL")}</span></div>`);
+ 
  if(n.status==="Reemplazo"&&n.replacementPerson)x.push(`<div class="next-extra-row"><span class="ico">👤</span><span>REEMPLAZA: ${n.replacementPerson}</span></div>`);
  if(n.contact)x.push(`<div class="next-extra-row"><span class="ico">👤</span><span>${n.contact}</span></div>`);
  if(n.phone)x.push(`<div class="next-extra-row"><span class="ico">📱</span><span>${n.phone}</span></div>`);
@@ -492,12 +524,23 @@ function shareEventV18(e){
 function renderHome(){
  const all=state.events,up=sortEvents(all.filter(e=>e.date>=todayString()));
  renderNextHero();
- $("statTotal").textContent=all.length;$("statConfirmed").textContent=all.filter(e=>e.status==="Confirmado").length;$("statReplacement").textContent=all.filter(e=>e.status==="Reemplazo").length;
+ $("statTotal").textContent=all.length;
+ $("statConfirmed").textContent=all.filter(e=>e.status==="Confirmado").length;
+ $("statReplacement").textContent=all.filter(e=>e.status==="Reemplazo").length;
  $("statNext").textContent=up[0]?formatDateWithWeekday(up[0].date).replace(/^(\S+)\s/,"$1\n"):"—";
+
+ // Inicio: lista completa del mes actual debajo de la tarjeta Próximo.
+ const now=new Date();
+ const key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+ const monthName=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(now).toLocaleUpperCase("es-CL");
+ const monthEvents=sortEvents(all.filter(e=>e.date.startsWith(key)));
+ const title=$("homeMonthListTitle");
+ if(title)title.textContent=`${monthEvents.length} ${monthEvents.length===1?"PRESTACIÓN":"PRESTACIONES"} · ${monthName}`;
+
  const q=upperText($("homeSearch")?.value||"");
- const shown=q?up.filter(e=>(e.artist+" "+e.place+" "+e.meeting+" "+formatDateWithWeekday(e.date)).toLocaleUpperCase("es-CL").includes(q)):up;
+ const shown=q?monthEvents.filter(e=>(e.artist+" "+e.place+" "+e.meeting+" "+formatDateWithWeekday(e.date)).toLocaleUpperCase("es-CL").includes(q)):monthEvents;
  const c=$("upcomingList");c.innerHTML="";
- if(!shown.length)c.innerHTML='<div class="empty">No hay prestaciones para mostrar.</div>';
+ if(!shown.length)c.innerHTML='<div class="empty">No hay prestaciones este mes.</div>';
  else shown.forEach(e=>c.appendChild(makeCompactCard(e)));
 }
 
