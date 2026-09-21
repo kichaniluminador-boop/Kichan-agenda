@@ -261,6 +261,17 @@
   margin-bottom:14px;
 }
 
+
+/* V25: estados de tarjetas + corrección de renderizado */
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 8px}
+.badge{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #555;border-radius:999px;background:#101010;font-size:10px;font-weight:900}
+.badge.confirmado{color:#35c66b;border-color:#35c66b}
+.badge.reemplazo{color:#62a9ff;border-color:#62a9ff}
+.badge.por-confirmar{color:#efbd37;border-color:#efbd37}
+.badge.cancelado{color:#ff6b6b;border-color:#ff6b6b}
+.badge.pagado{color:#35c66b;border-color:#35c66b}
+.badge.pendiente{color:#efbd37;border-color:#efbd37}
+
 </style>
 </head>
 <body>
@@ -376,6 +387,12 @@ const state={events:[],view:"home",editingId:null,returnView:"home",selectedDate
 const $=id=>document.getElementById(id);
 const cleanText=v=>String(v??"").trim();
 const upperText=v=>cleanText(v).toLocaleUpperCase("es-CL");
+function safeClass(v){
+ return cleanText(v).toLocaleLowerCase("es-CL")
+  .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/[^a-z0-9_-]+/g,"-")
+  .replace(/^-+|-+$/g,"");
+}
 function makeId(){return Date.now().toString()+"-"+Math.random().toString(36).slice(2,8)}
 function normalizeDate(v){const t=cleanText(v);if(/^\d{4}-\d{2}-\d{2}$/.test(t))return t;const m=t.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);return m?`${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`:""}
 function numericAmount(v){if(typeof v==="number"&&Number.isFinite(v))return Math.max(0,Math.round(v));const d=String(v??"").replace(/\D/g,"");return d?Number(d):0}
