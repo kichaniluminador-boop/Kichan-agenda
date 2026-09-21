@@ -356,27 +356,54 @@ render();
 $("pendientesPago").addEventListener("click", function(){
   
   const lista = events.filter(e => e.payment !== "Pagado");
-alert("PENDIENTES ENCONTRADAS: " + lista.length);
+
   if (!lista.length) {
     alert("NO HAY PRESTACIONES PENDIENTES DE PAGO");
     return;
   }
+$("m1").innerHTML = "";
 
-  $("ml").innerHTML =
-    `<div class="section">⏳ PENDIENTES DE PAGO</div>` +
-    lista
-      .sort((a,b) => String(a.date || "").localeCompare(String(b.date || "")))
-      .map(e => `
-        <div class="line">
-          <button type="button" class="link" onclick="edit('${e.id}')">
-            ${esc(e.artist || "SIN ARTISTA")}
-          </button>
-          <b class="gold">$${Number(e.amount || 0).toLocaleString("es-CL")}</b>
-        </div>
-      `).join("") +
-    `<button type="button" class="primary" onclick="view('summary')">
-      ← VOLVER AL RESUMEN
-    </button>`;
+const tituloPendientes = document.createElement("div");
+tituloPendientes.className = "section";
+tituloPendientes.textContent = "⏳ PENDIENTES DE PAGO";
+$("m1").appendChild(tituloPendientes);
+
+lista
+  .slice()
+  .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
+  .forEach(e => {
+    const fila = document.createElement("div");
+    fila.className = "line";
+
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "link";
+    boton.textContent = e.artist || "SIN ARTISTA";
+
+    boton.addEventListener("click", function () {
+      edit(e.id);
+    });
+
+    const monto = document.createElement("b");
+    monto.className = "gold";
+    monto.textContent = "$" + Number(e.amount || 0).toLocaleString("es-CL");
+
+    fila.appendChild(boton);
+    fila.appendChild(monto);
+    $("m1").appendChild(fila);
+  });
+
+const volver = document.createElement("button");
+volver.type = "button";
+volver.className = "primary";
+volver.textContent = "← VOLVER AL RESUMEN";
+
+volver.addEventListener("click", function () {
+  view("summary");
+});
+
+$("m1").appendChild(volver);
+  
 
   $("ml").scrollIntoView({behavior:"smooth", block:"start"});
 });  
