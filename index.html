@@ -354,6 +354,7 @@ $("backupFile").addEventListener("change", function(){
 save();
 render();
 $("pendientesPago").addEventListener("click", function(){
+ alert("BOTÓN PENDIENTES FUNCIONA"); 
   const lista = events.filter(e => e.payment !== "Pagado");
 
   if (!lista.length) {
