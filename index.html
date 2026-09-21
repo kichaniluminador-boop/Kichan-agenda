@@ -66,6 +66,41 @@
   text-align-last:center;
 }
 
+
+/* iPhone Safari: centra visualmente FECHA y HORAS */
+#formView input[type="date"].control,
+#formView input[type="time"].control{
+  position:relative;
+  height:52px;
+  min-height:52px;
+  padding:0 10px !important;
+  line-height:52px !important;
+  text-align:center !important;
+}
+#formView input[type="date"]::-webkit-date-and-time-value,
+#formView input[type="time"]::-webkit-date-and-time-value{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  height:52px !important;
+  min-height:52px !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:52px !important;
+  text-align:center !important;
+}
+#formView input[type="date"]::-webkit-datetime-edit,
+#formView input[type="time"]::-webkit-datetime-edit{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  height:52px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
 </style>
 </head>
 <body>
