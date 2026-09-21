@@ -24,7 +24,7 @@
 /* RESUMEN */
 .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 12px;text-align:center}.summary-card.full{grid-column:1/-1}.summary-card.clickable{cursor:pointer}.summary-card.clickable:active{transform:scale(.98)}.summary-number{color:var(--gold);font-size:27px;font-weight:900}.summary-label{color:var(--muted);font-size:11px;text-transform:uppercase;margin-top:6px}.summary-hint{margin-top:5px;color:var(--gold2);font-size:9px;font-weight:800}.payment-list{margin-top:24px}.payment-list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.payment-list-title{margin:0;color:var(--gold);font-size:18px}.small-close{border:1px solid #444;border-radius:13px;background:#242424;color:var(--gold);min-height:38px;padding:6px 11px;font-size:12px;font-weight:800}
 /* LISTAS RÁPIDAS */
-.simple-list{display:grid;gap:9px}.simple-item{width:100%;border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--text);padding:14px 16px;text-align:left}.simple-item strong{display:block;font-size:17px;margin-bottom:5px}.simple-item span{color:var(--gold);font-size:12px;font-weight:800}.list-note{text-align:center;color:var(--muted);font-size:12px;margin:-12px 0 20px}
+.simple-list{display:grid;gap:9px}.simple-item{width:100%;border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--text);padding:14px 16px;text-align:left}.simple-item strong{display:block;font-size:17px;margin-bottom:5px}.simple-item span{color:var(--gold);font-size:12px;font-weight:800}.list-top{display:flex;justify-content:flex-start;margin:-12px 0 18px}.back-list{border:1px solid #444;border-radius:14px;background:#242424;color:var(--gold);min-height:42px;padding:7px 14px;font-size:13px;font-weight:900}.list-note{text-align:center;color:var(--muted);font-size:12px;margin:-12px 0 20px}
 /* AJUSTES */
 .backup-section{margin-top:34px}.backup-title{text-align:center;color:var(--gold);font-size:19px;font-weight:900;margin:0 0 13px}.tools{padding:18px;border:1px solid var(--line);border-radius:22px;background:var(--card)}.tool-buttons{display:grid;gap:10px}.tool-btn{min-height:50px;border:1px solid #444;border-radius:16px;background:#242424;color:var(--gold);font-weight:800}.tool-btn.danger{color:#ff8585;border-color:#663838}#importFile{display:none}.empty{padding:30px 15px;text-align:center;color:var(--muted)}
 /* BARRA INFERIOR */
@@ -38,10 +38,14 @@
   padding-top:0;
   padding-bottom:0;
 }
+#formView .date-field{max-width:220px;margin-left:auto;margin-right:auto}
+#formView .date-field label{text-align:center}
 #formView input[type="date"].control{
   height:46px;
   min-height:46px;
 }
+#formView input[type="date"]::-webkit-date-and-time-value,#formView input[type="time"]::-webkit-date-and-time-value{text-align:center;margin:auto}
+#formView input[type="date"]::-webkit-datetime-edit,#formView input[type="time"]::-webkit-datetime-edit{display:flex;justify-content:center;align-items:center;width:100%}
 #formView input[type="text"].control,
 #formView input[type="tel"].control{
   text-align:center;
@@ -105,13 +109,13 @@
 </section>
 <section id="listView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 id="listTitle" class="page-title">Lista</h1>
-  <div class="list-note">Toca una prestación para editarla</div>
+  <div class="list-top"><button id="backListBtn" class="back-list" type="button">← VOLVER</button></div><div class="list-note">Toca una prestación para editarla</div>
   <div id="simpleList" class="simple-list"></div>
 </section>
 <section id="formView" class="view">
   <div class="brand">KICHAN ILUMINADOR</div><h1 id="formTitle" class="page-title">Nueva prestación</h1>
   <form id="eventForm" class="form-card">
-    <div class="field"><label for="date">📅 FECHA</label><input id="date" class="control" type="date" required></div><div id="datePreview" class="date-preview"></div>
+    <div class="field date-field"><label for="date">📅 FECHA</label><input id="date" class="control" type="date" required></div><div id="datePreview" class="date-preview"></div>
     <div class="field"><label for="artist">🎤 BANDA / ARTISTA</label><input id="artist" class="control" type="text" autocomplete="off" required></div>
     <div class="field"><label for="place">📍 LOCALIDAD / LUGAR</label><input id="place" class="control" type="text" autocomplete="off"></div>
     <div class="meeting-row"><div class="field compact-field"><label for="meeting">📌 PUNTO DE ENCUENTRO</label><input id="meeting" class="control" type="text" autocomplete="off"></div><div class="field compact-field"><label for="departure">🚌 SALIDA</label><input id="departure" class="control" type="time"></div></div>
@@ -149,7 +153,7 @@ function normalizeEvent(r){if(!r||typeof r!=="object")return null;const date=nor
 function sortEvents(a){return a.slice().sort((x,y)=>x.date.localeCompare(y.date)||(x.show||x.departure||"99:99").localeCompare(y.show||y.departure||"99:99"))}
 function loadEvents(){try{const r=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");return Array.isArray(r)?sortEvents(r.map(normalizeEvent).filter(Boolean)):[]}catch{return[]}}
 function saveEvents(){state.events=sortEvents(state.events);localStorage.setItem(STORAGE_KEY,JSON.stringify(state.events))}
-function showView(view){state.view=view;document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));const t=$(view+"View");if(t)t.classList.add("active");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));$("bottomNav").style.display=(view==="form"||view==="list")?"none":"grid";if(view==="home")renderHome();if(view==="calendar")renderCalendar();if(view==="summary")renderSummary();if(view==="list")renderSimpleList();window.scrollTo(0,0)}
+function showView(view){state.view=view;document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));const t=$(view+"View");if(t)t.classList.add("active");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));$("bottomNav").style.display=view==="form"?"none":"grid";if(view==="home")renderHome();if(view==="calendar")renderCalendar();if(view==="summary")renderSummary();if(view==="list")renderSimpleList();window.scrollTo(0,0)}
 function todayString(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function makeCompactCard(e,editable=true){const c=document.createElement("article");c.className="compact-card";c.innerHTML=`<div class="compact-date">${formatDateWithWeekday(e.date)}</div><h3 class="compact-title">${e.artist}</h3>${e.place?`<div class="compact-line">📍 ${e.place} <button class="compact-link" type="button">Cómo llegar</button></div>`:""}${e.meeting?`<div class="compact-line">Punto de encuentro: ${e.meeting}</div>`:""}<div class="compact-line muted">${e.departure?`🚌 ${e.departure}`:""} ${e.test?`🎚️ ${e.test}`:""} ${e.show?`🎤 ${e.show}`:""}</div>${e.contact?`<div class="compact-line">Contacto: ${e.contact}</div>`:""}${e.phone?`<div class="compact-line"><a style="color:var(--gold);text-decoration:none" href="tel:${e.phone.replace(/[^\d+]/g,"")}">📞 Llamar</a></div>`:""}${e.notes?`<div class="compact-notes">📝 ${e.notes}</div>`:""}${editable?`<div class="compact-actions"><button class="compact-action edit-btn" type="button">✏️ EDITAR</button></div>`:""}`;
 const link=c.querySelector(".compact-link");if(link)link.onclick=ev=>{ev.stopPropagation();window.open("https://maps.apple.com/?q="+encodeURIComponent(e.place),"_blank")};
@@ -159,8 +163,8 @@ function renderHome(){const all=state.events,up=sortEvents(all.filter(e=>e.date>
 function renderCalendar(){const y=state.calendarYear,m=state.calendarMonth;$("calendarMonth").textContent=new Intl.DateTimeFormat("es-CL",{month:"long",year:"numeric"}).format(new Date(y,m,1));const g=$("calendarGrid");g.innerHTML="";const off=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<off;i++){const b=document.createElement("button");b.className="day blank";g.appendChild(b)}const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,count=state.events.filter(e=>e.date===ds).length,b=document.createElement("button");b.type="button";b.className="day"+(count?" has-event":"")+(state.selectedDate===ds?" selected":"");b.innerHTML=`<span class="day-number">${d}</span>${count?`<span class="day-count">${count}</span>`:""}`;b.onclick=()=>{state.selectedDate=ds;renderCalendar()};g.appendChild(b)}renderSelectedDate()}
 function renderSelectedDate(){const t=$("selectedDateTitle"),c=$("selectedDateEvents");c.innerHTML="";if(!state.selectedDate){t.textContent="Selecciona un día";return}const a=state.events.filter(e=>e.date===state.selectedDate);t.textContent=`${a.length} ${a.length===1?"prestación":"prestaciones"} · ${formatDateWithWeekday(state.selectedDate)}`;if(!a.length){c.innerHTML='<div class="empty">No hay prestaciones este día.</div>';return}a.forEach(e=>c.appendChild(makeCompactCard(e)))}
 function renderSummary(){const paid=state.events.filter(e=>e.payment==="Pagado"),pending=state.events.filter(e=>e.payment!=="Pagado");$("sumPaid").textContent=paid.length;$("sumPending").textContent=pending.length;$("sumPaidMoney").textContent=formatMoney(paid.reduce((s,e)=>s+e.amount,0));$("sumPendingMoney").textContent=formatMoney(pending.reduce((s,e)=>s+e.amount,0))}
-function openSimpleList(filter,title){state.listFilter=filter;$("listTitle").textContent=title;showView("list")}
-function renderSimpleList(){const f=state.listFilter;let a=state.events;if(f==="confirmed")a=a.filter(e=>e.status==="Confirmado");if(f==="replacement")a=a.filter(e=>e.status==="Reemplazo");if(f==="paid")a=a.filter(e=>e.payment==="Pagado");if(f==="pending")a=a.filter(e=>e.payment!=="Pagado");const c=$("simpleList");c.innerHTML="";sortEvents(a).forEach(e=>{const b=document.createElement("button");b.type="button";b.className="simple-item";b.innerHTML=`<strong>${e.artist}</strong><span>${formatDateWithWeekday(e.date)}</span>`;b.onclick=()=>openEditForm(e.id,"list");c.appendChild(b)});if(!a.length)c.innerHTML='<div class="empty">No hay prestaciones en esta lista.</div>'}
+function openSimpleList(filter,title){state.listFilter=filter;state.listReturnView=(filter==="paid"||filter==="pending")?"summary":"home";$("listTitle").textContent=title;showView("list")}
+function renderSimpleList(){const f=state.listFilter;let a=state.events;if(f==="confirmed")a=a.filter(e=>e.status==="Confirmado");if(f==="replacement")a=a.filter(e=>e.status==="Reemplazo");if(f==="paid")a=a.filter(e=>e.payment==="Pagado");if(f==="pending")a=a.filter(e=>e.payment!=="Pagado");const c=$("simpleList");c.innerHTML="";const detailed=(f==="all"||f==="confirmed"||f==="replacement");sortEvents(a).forEach(e=>{if(detailed){const card=makeCompactCard(e,false);card.style.cursor="pointer";card.onclick=ev=>{if(ev.target.closest(".compact-link")||ev.target.closest("a"))return;openEditForm(e.id,"list")};c.appendChild(card)}else{const b=document.createElement("button");b.type="button";b.className="simple-item";b.innerHTML=`<strong>${e.artist}</strong>${e.place?`<div style="margin:6px 0;color:#d0d0d0;font-size:14px">📍 ${e.place}</div>`:""}<span>📅 ${formatDateWithWeekday(e.date)}</span>`;b.onclick=()=>openEditForm(e.id,"list");c.appendChild(b)}});if(!a.length)c.innerHTML='<div class="empty">No hay prestaciones en esta lista.</div>'}
 function clearForm(){$("eventForm").reset();$("status").value="Confirmado";$("payment").value="Pendiente";$("datePreview").textContent="";$("amount").value=""}
 function openNewForm(date="",ret="home"){state.editingId=null;state.returnView=ret;clearForm();$("formTitle").textContent="Nueva prestación";if(date){$("date").value=date;updateDatePreview()}showView("form")}
 function openEditForm(id,ret="home"){const e=state.events.find(x=>String(x.id)===String(id));if(!e)return;state.editingId=e.id;state.returnView=ret;$("formTitle").textContent="Editar prestación";["date","artist","place","meeting","departure","test","show","contact","phone","status","payment","notes"].forEach(k=>$(k).value=e[k]||"");$("amount").value=formatAmountInput(e.amount);updateDatePreview();showView("form")}
@@ -171,6 +175,7 @@ function importBackup(file){if(!file)return;const r=new FileReader();r.onload=()
 function clearAgenda(){if(confirm("¿Seguro que quieres dejar la agenda en 0?\n\nEsta acción borrará todas las prestaciones de este dispositivo.")){state.events=[];saveEvents();renderAll();showView("home")}}
 function renderAll(){renderHome();renderCalendar();renderSummary()}
 document.querySelectorAll(".nav-btn").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+$("backListBtn").onclick=()=>showView(state.listReturnView||"home");
 $("newEventBtn").onclick=()=>openNewForm("","home");
 $("prevMonth").onclick=()=>{if(--state.calendarMonth<0){state.calendarMonth=11;state.calendarYear--}state.selectedDate="";renderCalendar()};
 $("nextMonth").onclick=()=>{if(++state.calendarMonth>11){state.calendarMonth=0;state.calendarYear++}state.selectedDate="";renderCalendar()};
