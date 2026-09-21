@@ -511,12 +511,26 @@ function renderDetail(){
    ${e.phone?`<button id="detailContact" class="detail-btn" type="button">📱 CONTACTO</button>`:""}
    <button id="detailShare" class="detail-btn" type="button">↗ COMPARTIR</button>
    <button id="detailEdit" class="detail-btn" type="button">✏️ EDITAR</button>
+   <button id="detailDelete" class="detail-btn danger" type="button">🗑️ ELIMINAR</button>
+   <button id="detailCancel" class="detail-btn" type="button">CANCELAR</button>
   </div>
  </article>`;
  if($("detailMap"))$("detailMap").onclick=()=>openMapsChoiceV18(e.place);
  if($("detailContact"))$("detailContact").onclick=()=>openContactChoiceV18(e.phone);
  $("detailShare").onclick=()=>shareEventV18(e);
  $("detailEdit").onclick=()=>openEditForm(e.id,"detail");
+ $("detailDelete").onclick=()=>deleteEventFromDetail(e.id);
+ $("detailCancel").onclick=()=>showView(state.detailReturnView||"home");
+}
+function deleteEventFromDetail(id){
+ const e=state.events.find(x=>String(x.id)===String(id));
+ if(!e)return;
+ if(!confirm(`¿Eliminar esta prestación?\n\n${e.artist}\n${formatDateWithWeekday(e.date)}\n\nEsta acción no se puede deshacer.`))return;
+ state.events=state.events.filter(x=>String(x.id)!==String(id));
+ saveEvents();
+ state.detailId=null;
+ renderAll();
+ showView(state.detailReturnView||"home");
 }
 
 function closeActionSheet(){
