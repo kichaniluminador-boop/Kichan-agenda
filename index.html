@@ -5,409 +5,2549 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050505">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kichan Agenda">
+
 <title>Kichan Agenda</title>
+
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./kichan-icon-512.png">
+
 <style>
-:root{--gold:#e7b93f;--bg:#050505;--card:#141414;--line:#303030;--text:#f5f5f5;--muted:#969696}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{min-height:100vh;padding-bottom:120px}
-button,input,select,textarea{font:inherit}
-.app{width:min(100%,760px);margin:auto;padding:24px 18px}
-.brand{text-align:center;color:var(--gold);font-size:13px;font-weight:800;letter-spacing:6px;margin:14px 0 22px}
-h1{text-align:center;font-size:52px;line-height:1;margin:28px 0 36px}
-.view{display:none}.view.active{display:block}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
-.stat,.panel,.event,form{background:var(--card);border:1px solid var(--line);border-radius:26px}
-.stat{text-align:center;padding:17px 5px}.stat b{display:block;color:var(--gold);font-size:26px}.stat small,.muted,label{color:var(--muted)}
-.primary{width:100%;border:0;border-radius:19px;padding:17px;background:var(--gold);color:#050505;font-weight:800}
-.section{margin:28px 4px 12px;color:var(--muted);font-size:13px;letter-spacing:2px}
-.event{padding:20px;margin:11px 0}.event h3{font-size:21px;margin:6px 0}.gold{color:var(--gold)}.meta{margin:12px 0;color:var(--muted);font-size:13px;line-height:1.8}
-.actions,.formbuttons{display:flex;gap:8px}.actions button,.formbuttons button{flex:1;border:1px solid var(--line);border-radius:15px;background:#090909;color:var(--text);padding:13px}.delete{color:#ff7777!important}
-.panel{padding:22px 16px}.calendarhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.calendarhead h2{color:var(--gold);font-size:28px;margin:0}.calendarhead button{width:42px;height:42px;border:1px solid var(--line);border-radius:13px;background:#080808;color:var(--gold);font-size:23px}
-.week,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.week div{text-align:center;color:var(--muted);font-weight:700;padding:10px 0}
-.day{aspect-ratio:1/1.12;min-width:0;border:1px solid transparent;border-radius:14px;background:#080808;color:var(--text)}.day.today{border-color:var(--gold)}.day.has{background:var(--gold);color:#050505;font-weight:800}.blank{visibility:hidden}
-.monthlist{margin-top:24px}.line{display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid #292929}.line button{flex:1;border:0;background:none;color:var(--text);padding:0;text-align:left}
-form{padding:22px 17px}.field{margin-bottom:17px}label{display:block;margin:0 5px 8px;font-size:12px}
-input,select,textarea{display:block;width:100%;min-width:0;padding:15px;border:1px solid #383838;border-radius:17px;background:#080808;color:var(--text);-webkit-appearance:none;appearance:none}
-textarea{height:95px;resize:none}.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.formbuttons{margin-top:9px}.formbuttons .save{background:var(--gold);border-color:var(--gold);color:#050505;font-weight:800}
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary div{background:#080808;border:1px solid var(--line);border-radius:18px;padding:18px}.summary b{display:block;color:var(--gold);font-size:24px}
-.nav{position:fixed;z-index:20;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 28px),720px);display:grid;grid-template-columns:repeat(3,1fr);padding:10px;background:#111;border:1px solid var(--line);border-radius:27px}
-.nav button{border:0;background:none;color:#777;padding:9px}.nav button.active{color:var(--gold)}.hidden{display:none!important}
+:root{
+  --bg:#050505;
+  --card:#141414;
+  --field:#080808;
+  --line:#333;
+  --gold:#efbd37;
+  --gold2:#b18a25;
+  --text:#f5f5f5;
+  --muted:#969696;
+  --danger:#e05a5a;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
+  "Helvetica Neue",Arial,sans-serif;
+}
+
+body{
+  padding-top:max(18px,env(safe-area-inset-top));
+  padding-bottom:max(110px,env(safe-area-inset-bottom));
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+.app{
+  width:min(100%,760px);
+  margin:auto;
+  padding:24px 20px 145px;
+}
+
+.brand{
+  text-align:center;
+  color:var(--gold2);
+  font-weight:900;
+  letter-spacing:7px;
+  font-size:14px;
+  margin:12px 0 28px;
+}
+
+h1{
+  margin:0 0 34px;
+  font-size:clamp(48px,12vw,78px);
+  line-height:.95;
+  letter-spacing:-3px;
+}
+
+h2{
+  margin:0 0 18px;
+}
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+.sectionTitle{
+  color:#999;
+  letter-spacing:2.5px;
+  font-size:13px;
+  margin:32px 5px 14px;
+  font-weight:800;
+}
+
+/* BOTONES */
+
+.primary,
+.secondary,
+.danger{
+  width:100%;
+  border:0;
+  border-radius:20px;
+  min-height:58px;
+  padding:14px 18px;
+  font-weight:900;
+}
+
+.primary{
+  background:var(--gold);
+  color:#050505;
+}
+
+.secondary{
+  background:#292929;
+  color:#fff;
+}
+
+.danger{
+  background:#351616;
+  color:#ff8585;
+  border:1px solid #6b2929;
+}
+
+.smallBtn{
+  border:1px solid #3c3c3c;
+  background:#242424;
+  color:var(--gold);
+  border-radius:14px;
+  padding:10px 13px;
+  min-height:42px;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* INICIO */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--card);
+  border:1px solid #292929;
+  border-radius:22px;
+  padding:17px 8px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  color:var(--gold);
+  font-size:25px;
+}
+
+.stat span{
+  color:#888;
+  font-size:10px;
+}
+
+.eventCard{
+  background:var(--card);
+  border:1px solid #303030;
+  border-radius:24px;
+  padding:19px;
+  margin:11px 0;
+}
+
+.eventDate{
+  color:var(--gold);
+  font-size:13px;
+  font-weight:900;
+}
+
+.eventArtist{
+  font-size:21px;
+  font-weight:900;
+  margin:6px 0;
+}
+
+.eventPlace{
+  color:#aaa;
+  overflow-wrap:anywhere;
+}
+
+.miniTimes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:13px;
+  color:#bbb;
+  font-size:13px;
+}
+
+.empty{
+  color:#777;
+  text-align:center;
+  padding:30px 10px;
+}
+
+/* FORMULARIO */
+
+.formCard{
+  background:var(--card);
+  border:1px solid #333;
+  border-radius:28px;
+  padding:22px;
+}
+
+.field{
+  margin-bottom:20px;
+  min-width:0;
+}
+
+label{
+  display:block;
+  color:#999;
+  font-size:13px;
+  margin:0 7px 8px;
+  font-weight:700;
+}
+
+input,
+select,
+textarea{
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  background:var(--field);
+  border:1px solid #3b3b3b;
+  color:#fff;
+  border-radius:18px;
+  padding:14px 15px;
+  min-height:56px;
+  outline:none;
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--gold);
+}
+
+.meetingRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 122px;
+  gap:12px;
+  align-items:end;
+}
+
+.timeRow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.formActions{
+  display:grid;
+  gap:11px;
+  margin-top:24px;
+}
+
+/* CALENDARIO */
+
+.calendarCard{
+  background:var(--card);
+  border:1px solid #333;
+  border-radius:28px;
+  padding:21px 16px;
+}
+
+.calHeader{
+  display:grid;
+  grid-template-columns:54px 1fr 54px;
+  gap:10px;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.calHeader button{
+  height:54px;
+  border:1px solid #3b3b3b;
+  background:#080808;
+  color:var(--gold);
+  border-radius:17px;
+  font-size:30px;
+}
+
+.calTitle{
+  color:var(--gold);
+  text-align:center;
+  font-size:24px;
+  font-weight:900;
+}
+
+.weekdays,
+.calendarGrid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:6px;
+}
+
+.weekdays div{
+  color:#888;
+  text-align:center;
+  padding:7px 0;
+  font-size:13px;
+  font-weight:900;
+}
+
+.day{
+  position:relative;
+  border:0;
+  background:#070707;
+  color:#fff;
+  border-radius:14px;
+  aspect-ratio:1/1;
+  min-width:0;
+  font-size:16px;
+}
+
+.day.blank{
+  visibility:hidden;
+}
+
+.day.hasEvent{
+  background:var(--gold);
+  color:#050505;
+  font-weight:900;
+}
+
+.day.today{
+  outline:2px solid var(--gold);
+  outline-offset:2px;
+}
+
+.day.selected{
+  box-shadow:inset 0 0 0 3px #fff;
+}
+
+.eventDot{
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#050505;
+  bottom:6px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.dayDetails{
+  margin-top:23px;
+  border-top:1px solid #303030;
+  padding-top:19px;
+}
+
+/* DETALLES */
+
+.detailCard{
+  background:#090909;
+  border:1px solid #303030;
+  border-radius:22px;
+  padding:18px;
+  margin:12px 0;
+}
+
+.detailArtist{
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.detailRow{
+  padding:9px 0;
+  border-bottom:1px solid #222;
+}
+
+.detailLabel{
+  color:#777;
+  font-size:10px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+.detailValue{
+  color:#eee;
+  font-size:15px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.quickActions,
+.editActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+
+.editActions{
+  padding-top:14px;
+  border-top:1px solid #282828;
+}
+
+.notesBox{
+  margin-top:14px;
+  background:#151515;
+  border-left:3px solid var(--gold);
+  border-radius:15px;
+  padding:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.notesBox strong{
+  display:block;
+  color:var(--gold);
+  margin-bottom:7px;
+}
+
+/* RESUMEN */
+
+.summaryCard{
+  background:var(--card);
+  border:1px solid #303030;
+  border-radius:27px;
+  padding:20px;
+}
+
+.summaryLine{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:17px 0;
+  border-bottom:1px solid #292929;
+  text-align:left;
+}
+
+.summaryLine:last-child{
+  border-bottom:0;
+}
+
+.summaryLine strong{
+  color:var(--gold);
+  font-size:20px;
+}
+
+.summaryLine.clickable{
+  cursor:pointer;
+}
+
+.summaryLine.clickable::after{
+  content:"›";
+  color:var(--gold);
+  font-size:25px;
+}
+
+.summaryLine.clickable strong{
+  margin-left:auto;
+}
+
+.backupCard{
+  background:var(--card);
+  border:1px solid #303030;
+  border-radius:27px;
+  padding:20px;
+  margin-top:20px;
+}
+
+.backupButtons{
+  display:grid;
+  gap:10px;
+}
+
+/* PANEL */
+
+.sheet{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.76);
+  padding:18px;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.sheet.open{
+  display:flex;
+}
+
+.sheetBox{
+  width:min(100%,700px);
+  max-height:86vh;
+  overflow:auto;
+  background:#151515;
+  border:1px solid #3a3a3a;
+  border-radius:28px;
+  padding:22px;
+  padding-bottom:max(22px,env(safe-area-inset-bottom));
+}
+
+/* NAV */
+
+.bottomNav{
+  position:fixed;
+  z-index:50;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:max(12px,env(safe-area-inset-bottom));
+  width:min(calc(100% - 28px),700px);
+  height:84px;
+  background:#111;
+  border:1px solid #303030;
+  border-radius:28px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  padding:7px;
+}
+
+.navBtn{
+  border:0;
+  background:transparent;
+  color:#777;
+  border-radius:19px;
+  font-size:12px;
+}
+
+.navBtn span{
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
+}
+
+.navBtn.active{
+  color:var(--gold);
+}
+
+@media(max-width:380px){
+  .app{
+    padding-left:15px;
+    padding-right:15px;
+  }
+
+  .formCard{
+    padding:17px;
+  }
+
+  .meetingRow{
+    grid-template-columns:minmax(0,1fr) 110px;
+    gap:8px;
+  }
+
+  .timeRow,
+  .two{
+    gap:8px;
+  }
+
+  .calendarCard{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .calendarGrid,
+  .weekdays{
+    gap:4px;
+  }
+}
 </style>
 </head>
+
 <body>
-<main class="app">
+
+<div class="app">
+
 <div class="brand">KICHAN ILUMINADOR</div>
-<section id="home" class="view active">
+
+<!-- INICIO -->
+
+<section id="homeView" class="view active">
+
 <h1>Agenda</h1>
-<div class="stats"><div class="stat"><b id="st">0</b><small>EVENTOS</small></div><div class="stat"><b id="sm">0</b><small>ESTE MES</small></div><div class="stat"><b id="sn">—</b><small>PRÓXIMO</small></div></div>
-<button class="primary" onclick="newEvent()">＋ NUEVA PRESTACIÓN</button>
-<div class="section">PRÓXIMAS PRESTACIONES</div><div id="list"></div>
-</section>
-<section id="calendar" class="view">
-<h1>Calendario</h1><div class="panel">
-<div class="calendarhead"><button onclick="moveMonth(-1)">‹</button><h2 id="ct"></h2><button onclick="moveMonth(1)">›</button></div>
-<div class="week"><div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div>D</div></div>
-<div class="days" id="days"></div><div class="monthlist" id="ml"></div></div>
-</section>
-<section id="summary" class="view">
-  <h1>Resumen</h1>
 
-<div class="panel">
-  <div class="line">
-    <span>📋 PRESTACIONES</span>
-    <b class="gold" id="rt">0</b>
+<div class="stats">
+  <div class="stat">
+    <strong id="statTotal">0</strong>
+    <span>PRESTACIONES</span>
   </div>
 
-  <div class="line">
-    <span>✅ PAGADAS</span>
-    <b class="gold" id="rp">0</b>
+  <div class="stat">
+    <strong id="statMonth">0</strong>
+    <span>ESTE MES</span>
   </div>
 
-<div class="line" id="pendientesPago" role="button" style="cursor:pointer">
-    <span>⏳ PENDIENTES DE PAGO</span>
-    <b class="gold" id="rpend">0</b>
-  </div>
-
-  <div class="line">
-    <span>💰 TOTAL COBRADO</span>
-    <b class="gold" id="rcobrado">$0</b>
-  </div>
-
-  <div class="line">
-    <span>💵 TOTAL POR COBRAR</span>
-    <b class="gold" id="rporcobrar">$0</b>
+  <div class="stat">
+    <strong id="statNext">—</strong>
+    <span>PRÓXIMA</span>
   </div>
 </div>
 
-  <div class="section">RESPALDO DE SEGURIDAD</div>
+<button id="newEventBtn" class="primary" type="button">
++ NUEVA PRESTACIÓN
+</button>
 
-  <div class="panel">
-    <button type="button" class="primary" onclick="exportBackup()">
-      ⬆️ EXPORTAR RESPALDO
-    </button>
+<div class="sectionTitle">PRÓXIMAS PRESTACIONES</div>
+<div id="homeList"></div>
 
-    <button type="button" class="secondary" style="width:100%;margin-top:12px" onclick="document.getElementById('backupFile').click()">
-      ⬇️ RESTAURAR RESPALDO
-    </button>
-
-    <input id="backupFile" type="file" accept=".json,application/json" hidden>
-  </div>
 </section>
-<section id="editor" class="view">
-<h1 id="ft">Nueva prestación</h1>
-<form id="form">
-<div class="field"><label>📅 FECHA</label><input id="date" type="date" required></div>
-<div class="field"><label>🎤 BANDA / ARTISTA</label><input id="artist" required></div>
-<div class="field"><label>📍 LOCALIDAD</label><input id="place"></div>
-<div class="row"><div class="field"><label>📌 PUNTO DE ENCUENTRO</label><input id="meeting"></div><div class="field"><label>🚐 HORA SALIDA</label><input id="departure" type="time"></div></div>
-<div class="field"><label>🎚️ PRUEBA DE SONIDO</label><input id="test" type="time"></div>
-<div class="field"><label>🎤 HORA SHOW</label><input id="show" type="time"></div>
-<div class="row"><div class="field"><label>✅ ESTADO</label><select id="status"><option>Confirmado</option><option>Por confirmar</option><option>Reemplazo</option><option>Cancelado</option></select></div><div class="field"><label>💰 PAGO</label><select id="payment"><option>Pendiente</option><option>Pagado</option></select></div></div>
-<div class="field"><label>💵 MONTO $</label><input id="amount" type="number" min="0" inputmode="numeric"></div>
-<div class="field"><label>📝 NOTAS</label><textarea id="notes"></textarea></div>
-<div class="formbuttons"><button type="button" onclick="closeForm()">Cancelar</button><button class="save" type="submit">Guardar</button></div>
-<div class="formbuttons"><button id="del" type="button" class="delete hidden" onclick="deleteCurrent()">Eliminar prestación</button></div>
-</form></section>
-</main>
-<nav id="nav" class="nav"><button id="nh" class="active" onclick="view('home')">⌂<br>Inicio</button><button id="nc" onclick="view('calendar')">▣<br>Calendario</button><button id="ns" onclick="view('summary')">☰<br>Resumen</button></nav>
+
+<!-- CALENDARIO -->
+
+<section id="calendarView" class="view">
+
+<h1>Calendario</h1>
+
+<div class="calendarCard">
+
+<div class="calHeader">
+  <button id="prevMonth" type="button">‹</button>
+  <div id="calendarTitle" class="calTitle"></div>
+  <button id="nextMonth" type="button">›</button>
+</div>
+
+<div class="weekdays">
+  <div>L</div><div>M</div><div>X</div>
+  <div>J</div><div>V</div><div>S</div><div>D</div>
+</div>
+
+<div id="calendarGrid" class="calendarGrid"></div>
+
+<div id="dayDetails" class="dayDetails"></div>
+
+</div>
+
+<div class="sectionTitle">PRESTACIONES DEL MES</div>
+<div id="monthList"></div>
+
+</section>
+
+<!-- RESUMEN -->
+
+<section id="summaryView" class="view">
+
+<h1>Resumen</h1>
+
+<div class="summaryCard">
+
+<div class="summaryLine">
+  <span>📋 PRESTACIONES</span>
+  <strong id="sumTotal">0</strong>
+</div>
+
+<div class="summaryLine">
+  <span>✅ CONFIRMADAS</span>
+  <strong id="sumConfirmed">0</strong>
+</div>
+
+<div class="summaryLine">
+  <span>🔄 REEMPLAZOS</span>
+  <strong id="sumReplace">0</strong>
+</div>
+
+<button id="paidButton" class="summaryLine clickable" type="button">
+  <span>💰 PAGADAS</span>
+  <strong id="sumPaid">0</strong>
+</button>
+
+<button id="pendingButton" class="summaryLine clickable" type="button">
+  <span>⌛ PENDIENTES DE PAGO</span>
+  <strong id="sumPending">0</strong>
+</button>
+
+<div class="summaryLine">
+  <span>💵 TOTAL PAGADO</span>
+  <strong id="sumPaidMoney">$0</strong>
+</div>
+
+<div class="summaryLine">
+  <span>🧾 POR COBRAR</span>
+  <strong id="sumPendingMoney">$0</strong>
+</div>
+
+</div>
+
+<div class="backupCard">
+
+<div class="sectionTitle" style="margin-top:0">
+RESPALDO DE SEGURIDAD
+</div>
+
+<div class="backupButtons">
+
+<button id="exportBackup" class="secondary" type="button">
+⬇️ EXPORTAR RESPALDO
+</button>
+
+<button id="restoreBackup" class="secondary" type="button">
+⬆️ RESTAURAR RESPALDO
+</button>
+
+<input
+  id="backupFile"
+  type="file"
+  accept=".json,application/json"
+  style="display:none"
+>
+
+</div>
+</div>
+
+</section>
+
+<!-- FORMULARIO -->
+
+<section id="formView" class="view">
+
+<h1 id="formTitle">Nueva<br>prestación</h1>
+
+<form id="eventForm" class="formCard">
+
+<div class="field">
+<label for="fDate">📅 FECHA</label>
+<input id="fDate" type="date" required>
+</div>
+
+<div class="field">
+<label for="fArtist">🎤 BANDA / ARTISTA</label>
+<input id="fArtist" class="uppercase" type="text" required>
+</div>
+
+<div class="field">
+<label for="fPlace">📍 LOCALIDAD / LUGAR</label>
+<input id="fPlace" class="uppercase" type="text">
+</div>
+
+<div class="meetingRow">
+
+<div class="field">
+<label for="fMeeting">📌 PUNTO DE ENCUENTRO</label>
+<input id="fMeeting" class="uppercase" type="text">
+</div>
+
+<div class="field">
+<label for="fDeparture">🚌 SALIDA</label>
+<input id="fDeparture" type="time">
+</div>
+
+</div>
+
+<div class="timeRow">
+
+<div class="field">
+<label for="fTest">🎚️ PRUEBA</label>
+<input id="fTest" type="time">
+</div>
+
+<div class="field">
+<label for="fShow">🎤 SHOW</label>
+<input id="fShow" type="time">
+</div>
+
+</div>
+
+<div class="field">
+<label for="fContactName">👤 CONTACTO</label>
+<input
+  id="fContactName"
+  class="uppercase"
+  type="text"
+  placeholder="NOMBRE DEL CONTACTO"
+>
+</div>
+
+<div class="field">
+<label for="fContactPhone">📱 TELÉFONO</label>
+<input
+  id="fContactPhone"
+  type="tel"
+  inputmode="tel"
+  placeholder="+56 9 1234 5678"
+>
+</div>
+
+<div class="two">
+
+<div class="field">
+<label for="fStatus">✅ ESTADO</label>
+<select id="fStatus">
+<option>Confirmado</option>
+<option>Por confirmar</option>
+<option>Reemplazo</option>
+<option>Cancelado</option>
+</select>
+</div>
+
+<div class="field">
+<label for="fPayment">💰 PAGO</label>
+<select id="fPayment">
+<option>Pendiente</option>
+<option>Pagado</option>
+</select>
+</div>
+
+</div>
+
+<div class="field">
+<label for="fAmount">💵 MONTO $</label>
+<input id="fAmount" type="number" min="0" inputmode="numeric">
+</div>
+
+<div class="field">
+<label for="fNotes">📝 NOTAS</label>
+<textarea
+  id="fNotes"
+  class="uppercase"
+  placeholder="INFORMACIÓN ADICIONAL..."
+></textarea>
+</div>
+
+<div class="formActions">
+
+<button class="primary" type="submit">
+💾 GUARDAR
+</button>
+
+<button id="cancelForm" class="secondary" type="button">
+CANCELAR
+</button>
+
+<button id="deleteEvent" class="danger" type="button">
+🗑️ ELIMINAR
+</button>
+
+</div>
+
+</form>
+</section>
+
+</div>
+
+<!-- PANEL -->
+
+<div id="sheet" class="sheet">
+<div class="sheetBox">
+
+<h2 id="sheetTitle"></h2>
+<div id="sheetContent"></div>
+
+<div style="height:12px"></div>
+
+<button id="closeSheet" class="secondary" type="button">
+CERRAR
+</button>
+
+</div>
+</div>
+
+<!-- NAVEGACIÓN -->
+
+<nav id="bottomNav" class="bottomNav">
+
+<button class="navBtn active" data-view="home" type="button">
+<span>⌂</span>
+Inicio
+</button>
+
+<button class="navBtn" data-view="calendar" type="button">
+<span>▣</span>
+Calendario
+</button>
+
+<button class="navBtn" data-view="summary" type="button">
+<span>≡</span>
+Resumen
+</button>
+
+</nav>
+
 <script>
 "use strict";
-const KEY="kichan-agenda-v2",$=id=>document.getElementById(id);
-let events=loadEvents(),editing=null,cal=new Date();cal.setDate(1);
+
+const STORAGE_KEY = "kichan-agenda-data-v4";
+
+const $ = id => document.getElementById(id);
+
+const state = {
+  events:[],
+  editingId:null,
+  currentView:"home",
+  returnView:"home",
+  selectedDate:"",
+  calendarYear:new Date().getFullYear(),
+  calendarMonth:new Date().getMonth()
+};
+
+/* =========================
+   UTILIDADES
+========================= */
+
+function makeId(){
+  if(window.crypto && crypto.randomUUID){
+    return crypto.randomUUID();
+  }
+
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2);
+}
+
+function firstValue(obj,keys,fallback=""){
+  for(const key of keys){
+    if(
+      obj[key] !== undefined &&
+      obj[key] !== null &&
+      obj[key] !== ""
+    ){
+      return obj[key];
+    }
+  }
+  return fallback;
+}
+
+function normalizeDate(value){
+  if(!value) return "";
+
+  const text = String(value).trim();
+
+  if(/^\d{4}-\d{2}-\d{2}/.test(text)){
+    return text.slice(0,10);
+  }
+
+  const m = text.match(
+    /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
+  );
+
+  if(m){
+    return (
+      m[3] + "-" +
+      String(m[2]).padStart(2,"0") + "-" +
+      String(m[1]).padStart(2,"0")
+    );
+  }
+
+  return "";
+}
+
+function normalizeEvent(raw){
+  const e = raw || {};
+
+  return {
+    id:String(firstValue(e,["id","ID","uid"],makeId())),
+
+    date:normalizeDate(
+      firstValue(e,["date","fecha"])
+    ),
+
+    artist:String(
+      firstValue(
+        e,
+        ["artist","artista","band","banda","name","nombre"]
+      )
+    ).toUpperCase(),
+
+    place:String(
+      firstValue(
+        e,
+        ["place","location","localidad","lugar"]
+      )
+    ).toUpperCase(),
+
+    meeting:String(
+      firstValue(
+        e,
+        [
+          "meeting",
+          "meetingPoint",
+          "puntoEncuentro",
+          "punto",
+          "encuentro"
+        ]
+      )
+    ).toUpperCase(),
+
+    departure:String(
+      firstValue(
+        e,
+        ["departure","salida","arrival","horaSalida"]
+      )
+    ),
+
+    test:String(
+      firstValue(
+        e,
+        ["test","soundcheck","prueba","horaPrueba"]
+      )
+    ),
+
+    show:String(
+      firstValue(
+        e,
+        ["show","showtime","horaShow"]
+      )
+    ),
+
+    contactName:String(
+      firstValue(
+        e,
+        [
+          "contactName",
+          "contact",
+          "contacto",
+          "nombreContacto"
+        ]
+      )
+    ).toUpperCase(),
+
+    contactPhone:String(
+      firstValue(
+        e,
+        [
+          "contactPhone",
+          "phone",
+          "telefono",
+          "teléfono",
+          "telefonoContacto"
+        ]
+      )
+    ),
+
+    status:String(
+      firstValue(
+        e,
+        ["status","estado"],
+        "Confirmado"
+      )
+    ),
+
+    payment:String(
+      firstValue(
+        e,
+        ["payment","pago"],
+        "Pendiente"
+      )
+    ),
+
+    amount:Number(
+      firstValue(
+        e,
+        ["amount","monto"],
+        0
+      )
+    ) || 0,
+
+    notes:String(
+      firstValue(
+        e,
+        ["notes","notas"]
+      )
+    ).toUpperCase()
+  };
+}
+
+function extractArray(parsed){
+  if(Array.isArray(parsed)){
+    return parsed;
+  }
+
+  if(!parsed || typeof parsed !== "object"){
+    return null;
+  }
+
+  const keys = [
+    "events",
+    "data",
+    "D",
+    "prestaciones",
+    "items",
+    "agenda"
+  ];
+
+  for(const key of keys){
+    if(Array.isArray(parsed[key])){
+      return parsed[key];
+    }
+  }
+
+  return null;
+}
+
+function looksLikeEvent(item){
+  if(!item || typeof item !== "object"){
+    return false;
+  }
+
+  return Boolean(
+    item.date ||
+    item.fecha ||
+    item.artist ||
+    item.artista ||
+    item.band ||
+    item.banda
+  );
+}
+
+/* =========================
+   CARGA SEGURA Y MIGRACIÓN
+========================= */
+
 function loadEvents(){
- const keys=[KEY,"kichan-agenda-2026","kichan-agenda-events-v1","kichan-agenda-v1"];
- let raw=[];
- for(const k of keys){try{const v=JSON.parse(localStorage.getItem(k)||"[]");if(Array.isArray(v)&&v.length){raw=v;break}}catch(e){}}
- return raw.map((e,i)=>({id:String(e.id??(`migrated-${i}-${Date.now()}`)),date:e.date||"",artist:e.artist||"",place:e.place||e.location||"",meeting:e.meeting||"",departure:e.departure||e.arrival||"",test:e.test||e.soundcheck||"",show:e.show||e.showtime||"",status:e.status||"Confirmado",payment:e.payment||"Pendiente",amount:Number(e.amount||0),notes:e.notes||""}));
-}
-function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function today(){return iso(new Date())}
-function short(s){if(!s)return"";let a=s.split("-");return `${Number(a[2])}/${Number(a[1])}`}
-function longDate(s){if(!s)return"";const d=new Date(s+"T12:00:00");return d.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function save(){localStorage.setItem(KEY,JSON.stringify(events))}
-function view(v){["home","calendar","summary","editor"].forEach(x=>$(x).classList.toggle("active",x===v));$("nav").classList.toggle("hidden",v==="editor");["nh","nc","ns"].forEach(x=>$(x).classList.remove("active"));if(v==="home")$("nh").classList.add("active");if(v==="calendar")$("nc").classList.add("active");if(v==="summary")$("ns").classList.add("active");if(v!=="editor")render();window.scrollTo(0,0)}
-function render(){let sorted=[...events].filter(e=>e.date).sort((a,b)=>a.date.localeCompare(b.date)),up=sorted.filter(e=>e.date>=today()&&e.status!=="Cancelado"),n=new Date(),prefix=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`;$("st").textContent=events.length;$("sm").textContent=events.filter(e=>(e.date||"").startsWith(prefix)).length;$("sn").textContent=up[0]?short(up[0].date):"—";$("list").innerHTML=up.length?up.map(card).join(""):'<p class="muted">No hay prestaciones próximas.</p>';calendar();summary()}
-function card(e){return `<article class="event"><span class="gold">${esc(longDate(e.date))}</span><h3>${esc(e.artist||"Sin artista")}</h3><div class="muted">📍 ${esc(e.place||"Sin localidad")}</div><div class="meta">📌 ${esc(e.meeting||"—")} · 🚐 Salida ${esc(e.departure||"—")}<br>🎚️ Prueba de sonido ${esc(e.test||"—")} · 🎤 Hora show ${esc(e.show||"—")}<br>✅ ${esc(e.status||"Confirmado")} · 💰 ${esc(e.payment||"Pendiente")}</div><div class="actions"><button onclick="editEvent('${e.id}')">Editar</button><button class="delete" onclick="removeEvent('${e.id}')">Eliminar</button></div></article>`}
-function newEvent(d=today()){editing=null;$("form").reset();$("date").value=d;$("status").value="Confirmado";$("payment").value="Pendiente";$("ft").textContent="Nueva prestación";$("del").classList.add("hidden");view("editor")}
-function editEvent(id){id=String(id);let e=events.find(x=>String(x.id)===id);if(!e)return;editing=id;["date","artist","place","meeting","departure","test","show","status","payment","amount","notes"].forEach(k=>$(k).value=e[k]??"");$("ft").textContent="Editar prestación";$("del").classList.remove("hidden");view("editor")}
-$("form").addEventListener("submit",e=>{e.preventDefault();let o={id:editing||(`${Date.now()}-${Math.random().toString(36).slice(2,7)}`),date:$("date").value,artist:$("artist").value.trim(),place:$("place").value.trim(),meeting:$("meeting").value.trim(),departure:$("departure").value,test:$("test").value,show:$("show").value,status:$("status").value,payment:$("payment").value,amount:Number($("amount").value||0),notes:$("notes").value.trim()};if(!o.date||!o.artist)return;let i=events.findIndex(x=>String(x.id)===String(o.id));if(i<0)events.push(o);else events[i]=o;save();editing=null;view("home")});
-function closeForm(){editing=null;view("home")}
-function removeEvent(id){id=String(id);let e=events.find(x=>String(x.id)===id);if(e&&confirm(`¿Eliminar ${e.artist||"esta prestación"}?`)){events=events.filter(x=>String(x.id)!==id);save();render()}}
-function deleteCurrent(){if(!editing)return;const id=String(editing),e=events.find(x=>String(x.id)===id);if(e&&confirm(`¿Eliminar ${e.artist||"esta prestación"}?`)){events=events.filter(x=>String(x.id)!==id);save();editing=null;view("home")}}
-function moveMonth(n){cal.setMonth(cal.getMonth()+n);calendar()}
-function calendar(){
-  const M=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-  let y=cal.getFullYear(),m=cal.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0).getDate(),offset=(first.getDay()+6)%7,html="";
-  $("ct").textContent=`${M[m]} ${y}`;
 
-  for(let i=0;i<offset;i++){
-    html+='<button type="button" class="day blank" disabled></button>';
-  }
+  try{
+    const saved =
+      JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
 
-  for(let d=1;d<=last;d++){
-    let date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    let count=events.filter(e=>e.date===date).length;
-    html+=`<button type="button" class="day${date===today()?" today":""}${count?" has":""}" onclick="dayClick('${date}')">${d}${count?`<br>●${count>1?" "+count:""}`:""}</button>`;
-  }
+    if(Array.isArray(saved)){
+      return saved
+        .filter(looksLikeEvent)
+        .map(normalizeEvent);
+    }
+  }catch(error){}
 
-  $("days").innerHTML=html;
+  let candidates = [];
 
-  let list=events
-    .filter(e=>(e.date||"").startsWith(`${y}-${String(m+1).padStart(2,"0")}`))
-    .sort((a,b)=>(a.date+(a.show||"")).localeCompare(b.date+(b.show||"")));
+  for(let i=0;i<localStorage.length;i++){
 
-  $("ml").innerHTML=list.length
-    ?list.map(e=>`
-      <button
-        type="button"
-        onclick="editEvent('${e.id}')"
-        style="width:100%;text-align:left;background:transparent;color:white;border:0;border-bottom:1px solid #292929;padding:18px 0;display:block;"
-      >
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
-          <div style="font-size:18px;line-height:1.3;min-width:0;">
-            <b>${esc(short(e.date))} • ${esc(e.artist||"Sin artista")}</b>
-          </div>
-          <div style="color:#e7b93f;font-size:15px;white-space:nowrap;">
-            🎚️ ${esc(e.test||"—")} • 🎤 ${esc(e.show||"—")}
-          </div>
-        </div>
+    const key = localStorage.key(i);
 
-        <div style="margin-top:8px;color:#b8b8b8;font-size:16px;">
-          📍 ${esc(e.place||"—")}
-        </div>
-
-        ${e.notes?`
-          <div style="margin-top:7px;color:#b8b8b8;font-size:15px;line-height:1.4;">
-            📝 ${esc(e.notes)}
-          </div>
-        `:""}
-      </button>
-    `).join("")
-    :'<p class="muted">No hay prestaciones este mes.</p>';
-}
-function dayClick(date){
-  let list=events.filter(e=>e.date===date);
-
-  if(list.length===0){
-    newEvent(date);
-    return;
-  }
-
-  $("ml").innerHTML=
-    list.map(e=>`
-      <div class="line">
-        <button type="button" onclick="editEvent('${e.id}')">
-          ${esc(e.artist||"SIN ARTISTA")}
-        </button>
-        <b class="gold">${esc(e.show||"—")}</b>
-      </div>
-    `).join("")
-    +
-    `<button type="button" class="primary" style="margin-top:16px" onclick="newEvent('${date}')">
-      ＋ AGREGAR OTRA PRESTACIÓN
-    </button>`;
-
-  $("ml").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function summary(){
-  const rt = $("rt");
-  const rp = $("rp");
-  const rpend = $("rpend");
-  const rcobrado = $("rcobrado");
-  const rporcobrar = $("rporcobrar");
-
-  const pagadas = events.filter(e => e.payment === "Pagado");
-  const pendientes = events.filter(e => e.payment !== "Pagado");
-
-  const monto = e => {
-    const n = Number(String(e.amount || 0).replace(/[^\d]/g,""));
-    return Number.isFinite(n) ? n : 0;
-  };
-
-  const totalCobrado = pagadas.reduce((s,e) => s + monto(e), 0);
-  const totalPorCobrar = pendientes.reduce((s,e) => s + monto(e), 0);
-
-  const pesos = n => "$" + n.toLocaleString("es-CL");
-
-  if(rt) rt.textContent = events.length;
-  if(rp) rp.textContent = pagadas.length;
-  if(rpend) rpend.textContent = pendientes.length;
-  if(rcobrado) rcobrado.textContent = pesos(totalCobrado);
-  if(rporcobrar) rporcobrar.textContent = pesos(totalPorCobrar);
-}
-document.addEventListener("input",function(e){
-  if((e.target.tagName==="INPUT"&&e.target.type==="text")||e.target.tagName==="TEXTAREA"){
-    const inicio=e.target.selectionStart;
-    const fin=e.target.selectionEnd;
-    e.target.value=e.target.value.toUpperCase();
-    if(inicio!==null)e.target.setSelectionRange(inicio,fin);
-  }
-}); 
-// ===== RESPALDO DE AGENDA =====
-
-function exportBackup(){
-  const respaldo = {
-    app: "KICHAN AGENDA",
-    version: 1,
-    fecha: new Date().toISOString(),
-    events: events
-  };
-
-  const contenido = JSON.stringify(respaldo, null, 2);
-  const blob = new Blob([contenido], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-
-  const enlace = document.createElement("a");
-  enlace.href = url;
-
-  const ahora = new Date();
-  const nombre =
-    "KICHAN-AGENDA-" +
-    ahora.getFullYear() + "-" +
-    String(ahora.getMonth()+1).padStart(2,"0") + "-" +
-    String(ahora.getDate()).padStart(2,"0") +
-    ".json";
-
-  enlace.download = nombre;
-  document.body.appendChild(enlace);
-  enlace.click();
-  enlace.remove();
-
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-
-function importBackup(){
-  const input = $("backupFile");
-
-  input.value = "";
-  input.click();
-}
-
-
-$("backupFile").addEventListener("change", function(){
-
-  const archivo = this.files && this.files[0];
-  if(!archivo) return;
-
-  const lector = new FileReader();
-
-  lector.onload = function(){
-
-    try{
-
-      const respaldo = JSON.parse(lector.result);
-
-      let nuevosEventos;
-
-      if(Array.isArray(respaldo)){
-        nuevosEventos = respaldo;
-      }
-      else if(respaldo && Array.isArray(respaldo.events)){
-        nuevosEventos = respaldo.events;
-      }
-      else{
-        throw new Error("Formato incorrecto");
-      }
-
-      if(!confirm(
-        "¿RESTAURAR ESTE RESPALDO?\n\n" +
-        "La agenda actual será reemplazada por la información del respaldo."
-      )){
-        return;
-      }
-
-      events = nuevosEventos;
-
-      save();
-      render();
-      calendar();
-      summary();
-
-      alert(
-        "RESPALDO RESTAURADO CORRECTAMENTE\n\n" +
-        events.length +
-        " prestaciones recuperadas."
-      );
-
-      view("home");
-
-    }catch(error){
-
- alert(
-  "ERROR AL RESTAURAR:\n\n" +
-  error.name + "\n" +
-  error.message
-);     
-
+    if(!key || key === STORAGE_KEY){
+      continue;
     }
 
-  };
+    try{
+      const parsed =
+        JSON.parse(localStorage.getItem(key));
 
-  lector.readAsText(archivo);
+      const arr = extractArray(parsed);
 
-}); 
-save();
-render();
-$("pendientesPago").addEventListener("click", function () {
-  const lista = events
-    .filter(e => e.payment !== "Pagado")
-    .slice()
-    .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+      if(arr && arr.some(looksLikeEvent)){
+        candidates.push(...arr);
+      }
 
-  if (!lista.length) {
-    alert("NO HAY PRESTACIONES PENDIENTES DE PAGO");
+    }catch(error){}
+  }
+
+  const unique = [];
+  const signatures = new Set();
+
+  candidates
+    .filter(looksLikeEvent)
+    .map(normalizeEvent)
+    .forEach(e => {
+
+      const signature = [
+        e.date,
+        e.artist,
+        e.place,
+        e.show
+      ].join("|");
+
+      if(!signatures.has(signature)){
+        signatures.add(signature);
+        unique.push(e);
+      }
+    });
+
+  try{
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(unique)
+    );
+  }catch(error){}
+
+  return unique;
+}
+
+function saveEvents(){
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state.events)
+  );
+}
+
+/* =========================
+   FECHAS Y FORMATO
+========================= */
+
+function todayString(){
+  const d = new Date();
+
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("-");
+}
+
+function formatDate(value){
+  if(!value) return "SIN FECHA";
+
+  const p = value.split("-");
+
+  if(p.length !== 3){
+    return value;
+  }
+
+  return p[2] + "/" + p[1] + "/" + p[0];
+}
+
+function formatMoney(value){
+  return "$" +
+    Number(value || 0).toLocaleString("es-CL");
+}
+
+function eventSort(a,b){
+  const aa =
+    (a.date || "9999-99-99") +
+    " " +
+    (a.show || "99:99");
+
+  const bb =
+    (b.date || "9999-99-99") +
+    " " +
+    (b.show || "99:99");
+
+  return aa.localeCompare(bb);
+}
+
+/* =========================
+   TELÉFONO / WHATSAPP / MAPA
+========================= */
+
+function telephoneNumber(value){
+  return String(value || "")
+    .replace(/[^\d+]/g,"");
+}
+
+function whatsappNumber(value){
+
+  let number =
+    String(value || "").replace(/\D/g,"");
+
+  if(number.startsWith("00")){
+    number = number.slice(2);
+  }
+
+  if(number.startsWith("0")){
+    number = number.slice(1);
+  }
+
+  if(number.length === 9){
+    number = "56" + number;
+  }
+
+  return number;
+}
+
+function callContact(phone){
+  const number = telephoneNumber(phone);
+
+  if(number){
+    window.location.href = "tel:" + number;
+  }
+}
+
+function whatsappContact(phone){
+  const number = whatsappNumber(phone);
+
+  if(number){
+    window.location.href =
+      "https://wa.me/" + number;
+  }
+}
+
+function openMap(destination){
+  if(!destination) return;
+
+  window.location.href =
+    "https://maps.apple.com/?q=" +
+    encodeURIComponent(destination);
+}
+
+/* =========================
+   NAVEGACIÓN
+========================= */
+
+function showView(name){
+
+  state.currentView = name;
+
+  document.querySelectorAll(".view")
+    .forEach(view => {
+      view.classList.remove("active");
+    });
+
+  const target = $(name + "View");
+
+  if(target){
+    target.classList.add("active");
+  }
+
+  if(name === "form"){
+    $("bottomNav").style.display = "none";
+  }else{
+    $("bottomNav").style.display = "grid";
+
+    document.querySelectorAll(".navBtn")
+      .forEach(btn => {
+        btn.classList.toggle(
+          "active",
+          btn.dataset.view === name
+        );
+      });
+  }
+
+  if(name === "home"){
+    renderHome();
+  }
+
+  if(name === "calendar"){
+    renderCalendar();
+  }
+
+  if(name === "summary"){
+    renderSummary();
+  }
+
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll(".navBtn")
+  .forEach(btn => {
+
+    btn.addEventListener("click",function(){
+      showView(this.dataset.view);
+    });
+
+  });
+
+/* =========================
+   MAYÚSCULAS
+========================= */
+
+document.querySelectorAll(".uppercase")
+  .forEach(input => {
+
+    input.addEventListener("input",function(){
+
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+
+      this.value = this.value.toUpperCase();
+
+      try{
+        this.setSelectionRange(start,end);
+      }catch(error){}
+    });
+
+  });
+
+/* =========================
+   FORMULARIO
+========================= */
+
+function clearForm(){
+
+  $("eventForm").reset();
+
+  $("fStatus").value = "Confirmado";
+  $("fPayment").value = "Pendiente";
+}
+
+function openForm(id=null,presetDate=""){
+
+  if(state.currentView !== "form"){
+    state.returnView = state.currentView;
+  }
+
+  state.editingId =
+    id === null ? null : String(id);
+
+  clearForm();
+
+  if(state.editingId){
+
+    const e =
+      state.events.find(
+        item => item.id === state.editingId
+      );
+
+    if(!e) return;
+
+    $("formTitle").innerHTML =
+      "Editar<br>prestación";
+
+    $("fDate").value = e.date;
+    $("fArtist").value = e.artist;
+    $("fPlace").value = e.place;
+    $("fMeeting").value = e.meeting;
+    $("fDeparture").value = e.departure;
+    $("fTest").value = e.test;
+    $("fShow").value = e.show;
+    $("fContactName").value = e.contactName;
+    $("fContactPhone").value = e.contactPhone;
+    $("fStatus").value = e.status;
+    $("fPayment").value = e.payment;
+    $("fAmount").value =
+      e.amount ? e.amount : "";
+    $("fNotes").value = e.notes;
+
+    $("deleteEvent").style.display = "block";
+
+  }else{
+
+    $("formTitle").innerHTML =
+      "Nueva<br>prestación";
+
+    $("fDate").value =
+      presetDate || todayString();
+
+    $("deleteEvent").style.display = "none";
+  }
+
+  closeSheet();
+  showView("form");
+}
+
+$("newEventBtn").addEventListener(
+  "click",
+  () => openForm()
+);
+
+$("cancelForm").addEventListener(
+  "click",
+  () => showView(state.returnView || "home")
+);
+
+$("eventForm").addEventListener(
+  "submit",
+  function(event){
+
+    event.preventDefault();
+
+    const data = normalizeEvent({
+
+      id:state.editingId || makeId(),
+
+      date:$("fDate").value,
+
+      artist:$("fArtist").value.trim(),
+
+      place:$("fPlace").value.trim(),
+
+      meeting:$("fMeeting").value.trim(),
+
+      departure:$("fDeparture").value,
+
+      test:$("fTest").value,
+
+      show:$("fShow").value,
+
+      contactName:
+        $("fContactName").value.trim(),
+
+      contactPhone:
+        $("fContactPhone").value.trim(),
+
+      status:$("fStatus").value,
+
+      payment:$("fPayment").value,
+
+      amount:$("fAmount").value,
+
+      notes:$("fNotes").value.trim()
+    });
+
+    if(!data.date || !data.artist){
+      alert("Falta ingresar FECHA o BANDA / ARTISTA.");
+      return;
+    }
+
+    if(state.editingId){
+
+      const index =
+        state.events.findIndex(
+          e => e.id === state.editingId
+        );
+
+      if(index >= 0){
+        state.events[index] = data;
+      }
+
+    }else{
+      state.events.push(data);
+    }
+
+    saveEvents();
+
+    state.selectedDate = data.date;
+
+    const parts = data.date.split("-");
+
+    if(parts.length === 3){
+      state.calendarYear = Number(parts[0]);
+      state.calendarMonth = Number(parts[1]) - 1;
+    }
+
+    state.editingId = null;
+
+    renderAll();
+
+    showView(state.returnView || "home");
+  }
+);
+
+$("deleteEvent").addEventListener(
+  "click",
+  function(){
+
+    if(!state.editingId){
+      return;
+    }
+
+    const e =
+      state.events.find(
+        item => item.id === state.editingId
+      );
+
+    const name =
+      e && e.artist
+        ? "\n\n" + e.artist
+        : "";
+
+    if(
+      !confirm(
+        "¿Eliminar esta prestación?" + name
+      )
+    ){
+      return;
+    }
+
+    state.events =
+      state.events.filter(
+        item => item.id !== state.editingId
+      );
+
+    saveEvents();
+
+    state.editingId = null;
+
+    renderAll();
+
+    showView(state.returnView || "home");
+  }
+);
+
+/* =========================
+   TARJETA SIMPLE
+========================= */
+
+function createEventCard(e){
+
+  const card =
+    document.createElement("div");
+
+  card.className = "eventCard";
+
+  const date =
+    document.createElement("div");
+
+  date.className = "eventDate";
+  date.textContent = formatDate(e.date);
+
+  const artist =
+    document.createElement("div");
+
+  artist.className = "eventArtist";
+  artist.textContent =
+    e.artist || "SIN ARTISTA";
+
+  const place =
+    document.createElement("div");
+
+  place.className = "eventPlace";
+  place.textContent =
+    e.place || "SIN LOCALIDAD";
+
+  const times =
+    document.createElement("div");
+
+  times.className = "miniTimes";
+
+  if(e.departure){
+    const item = document.createElement("span");
+    item.textContent = "🚌 " + e.departure;
+    times.appendChild(item);
+  }
+
+  if(e.test){
+    const item = document.createElement("span");
+    item.textContent = "🎚️ " + e.test;
+    times.appendChild(item);
+  }
+
+  if(e.show){
+    const item = document.createElement("span");
+    item.textContent = "🎤 " + e.show;
+    times.appendChild(item);
+  }
+
+  card.appendChild(date);
+  card.appendChild(artist);
+  card.appendChild(place);
+  card.appendChild(times);
+
+  card.addEventListener(
+    "click",
+    () => openForm(e.id)
+  );
+
+  return card;
+}
+
+/* =========================
+   DETALLES
+========================= */
+
+function makeDetailRow(label,value){
+
+  if(
+    value === undefined ||
+    value === null ||
+    value === ""
+  ){
+    return null;
+  }
+
+  const row =
+    document.createElement("div");
+
+  row.className = "detailRow";
+
+  const labelEl =
+    document.createElement("div");
+
+  labelEl.className = "detailLabel";
+  labelEl.textContent = label;
+
+  const valueEl =
+    document.createElement("div");
+
+  valueEl.className = "detailValue";
+  valueEl.textContent = value;
+
+  row.appendChild(labelEl);
+  row.appendChild(valueEl);
+
+  return row;
+}
+
+function actionButton(text,callback){
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+  button.className = "smallBtn";
+  button.textContent = text;
+
+  button.addEventListener(
+    "click",
+    function(event){
+      event.stopPropagation();
+      callback();
+    }
+  );
+
+  return button;
+}
+
+function createDetailCard(e){
+
+  const card =
+    document.createElement("div");
+
+  card.className = "detailCard";
+
+  const artist =
+    document.createElement("div");
+
+  artist.className = "detailArtist";
+  artist.textContent =
+    e.artist || "SIN ARTISTA";
+
+  card.appendChild(artist);
+
+  const rows = [
+
+    makeDetailRow(
+      "📅 FECHA",
+      formatDate(e.date)
+    ),
+
+    makeDetailRow(
+      "📍 LOCALIDAD",
+      e.place
+    ),
+
+    makeDetailRow(
+      "📌 PUNTO DE ENCUENTRO",
+      e.meeting
+    ),
+
+    makeDetailRow(
+      "🚌 SALIDA",
+      e.departure
+    ),
+
+    makeDetailRow(
+      "🎚️ PRUEBA DE SONIDO",
+      e.test
+    ),
+
+    makeDetailRow(
+      "🎤 HORA SHOW",
+      e.show
+    ),
+
+    makeDetailRow(
+      "👤 CONTACTO",
+      e.contactName
+    ),
+
+    makeDetailRow(
+      "📱 TELÉFONO",
+      e.contactPhone
+    ),
+
+    makeDetailRow(
+      "✅ ESTADO",
+      e.status
+    ),
+
+    makeDetailRow(
+      "💰 PAGO",
+      e.payment
+    ),
+
+    makeDetailRow(
+      "💵 MONTO",
+      e.amount ? formatMoney(e.amount) : ""
+    )
+  ];
+
+  rows.forEach(row => {
+    if(row){
+      card.appendChild(row);
+    }
+  });
+
+  /* NOTAS: SOLO SI EXISTEN */
+
+  if(e.notes && e.notes.trim()){
+
+    const notes =
+      document.createElement("div");
+
+    notes.className = "notesBox";
+
+    const title =
+      document.createElement("strong");
+
+    title.textContent = "📝 NOTAS";
+
+    const content =
+      document.createElement("div");
+
+    content.textContent = e.notes;
+
+    notes.appendChild(title);
+    notes.appendChild(content);
+
+    card.appendChild(notes);
+  }
+
+  /* ACCIONES RÁPIDAS */
+
+  const quick =
+    document.createElement("div");
+
+  quick.className = "quickActions";
+
+  if(e.place){
+
+    quick.appendChild(
+      actionButton(
+        "🗺️ CÓMO LLEGAR · LOCALIDAD",
+        () => openMap(e.place)
+      )
+    );
+  }
+
+  if(e.meeting){
+
+    const meetingDestination =
+      e.place
+        ? e.meeting + ", " + e.place
+        : e.meeting;
+
+    quick.appendChild(
+      actionButton(
+        "📌 CÓMO LLEGAR · ENCUENTRO",
+        () => openMap(meetingDestination)
+      )
+    );
+  }
+
+  if(e.contactPhone){
+
+    quick.appendChild(
+      actionButton(
+        "📞 LLAMAR",
+        () => callContact(e.contactPhone)
+      )
+    );
+
+    quick.appendChild(
+      actionButton(
+        "💬 WHATSAPP",
+        () => whatsappContact(e.contactPhone)
+      )
+    );
+  }
+
+  if(quick.children.length){
+    card.appendChild(quick);
+  }
+
+  /* ACCIONES DE LA PRESTACIÓN */
+
+  const editActions =
+    document.createElement("div");
+
+  editActions.className = "editActions";
+
+  editActions.appendChild(
+    actionButton(
+      "✏️ EDITAR",
+      () => openForm(e.id)
+    )
+  );
+
+  /*
+    GUARDAR:
+    En modo detalle no hay cambios pendientes.
+    Al tocar GUARDAR abre la edición de esa
+    prestación, donde el botón principal 💾 GUARDAR
+    confirma los cambios.
+  */
+  editActions.appendChild(
+    actionButton(
+      "💾 GUARDAR",
+      () => openForm(e.id)
+    )
+  );
+
+  editActions.appendChild(
+    actionButton(
+      "🗑️ ELIMINAR",
+      () => deleteFromDetails(e.id)
+    )
+  );
+
+  card.appendChild(editActions);
+
+  return card;
+}
+
+function deleteFromDetails(id){
+
+  const e =
+    state.events.find(
+      item => item.id === String(id)
+    );
+
+  if(!e) return;
+
+  if(
+    !confirm(
+      "¿Eliminar esta prestación?\n\n" +
+      e.artist
+    )
+  ){
     return;
   }
 
-  const contenedor = $("m1");
-  contenedor.innerHTML = "";
+  state.events =
+    state.events.filter(
+      item => item.id !== String(id)
+    );
 
-  const titulo = document.createElement("div");
-  titulo.className = "section";
-  titulo.textContent = "⌛ PENDIENTES DE PAGO";
-  contenedor.appendChild(titulo);
+  saveEvents();
 
-  lista.forEach(e => {
-    const fila = document.createElement("div");
-    fila.className = "line";
+  renderAll();
 
-    const boton = document.createElement("button");
-    boton.type = "button";
-    boton.className = "link";
-    boton.textContent = e.artist || "SIN ARTISTA";
+  if($("sheet").classList.contains("open")){
+    closeSheet();
+  }
+}
 
-    boton.addEventListener("click", function () {
-      edit(e.id);
+/* =========================
+   INICIO
+========================= */
+
+function renderHome(){
+
+  const today = todayString();
+  const month = today.slice(0,7);
+
+  $("statTotal").textContent =
+    state.events.length;
+
+  $("statMonth").textContent =
+    state.events.filter(
+      e => e.date.startsWith(month)
+    ).length;
+
+  const upcoming =
+    state.events
+      .filter(
+        e =>
+          e.date >= today &&
+          e.status !== "Cancelado"
+      )
+      .slice()
+      .sort(eventSort);
+
+  $("statNext").textContent =
+    upcoming.length
+      ? upcoming[0].date.slice(8,10)
+      : "—";
+
+  const list = $("homeList");
+  list.innerHTML = "";
+
+  if(!upcoming.length){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className = "empty";
+    empty.textContent =
+      "NO HAY PRÓXIMAS PRESTACIONES.";
+
+    list.appendChild(empty);
+    return;
+  }
+
+  upcoming.forEach(e => {
+    list.appendChild(createEventCard(e));
+  });
+}
+
+/* =========================
+   CALENDARIO
+========================= */
+
+const MONTHS = [
+  "Enero","Febrero","Marzo",
+  "Abril","Mayo","Junio",
+  "Julio","Agosto","Septiembre",
+  "Octubre","Noviembre","Diciembre"
+];
+
+function makeDateString(year,month,day){
+
+  return (
+    year + "-" +
+    String(month+1).padStart(2,"0") + "-" +
+    String(day).padStart(2,"0")
+  );
+}
+
+function renderCalendar(){
+
+  const year = state.calendarYear;
+  const month = state.calendarMonth;
+
+  $("calendarTitle").textContent =
+    MONTHS[month] + " " + year;
+
+  const grid = $("calendarGrid");
+  grid.innerHTML = "";
+
+  const firstOffset =
+    (
+      new Date(year,month,1).getDay() + 6
+    ) % 7;
+
+  const daysInMonth =
+    new Date(year,month+1,0).getDate();
+
+  for(let i=0;i<firstOffset;i++){
+
+    const blank =
+      document.createElement("div");
+
+    blank.className = "day blank";
+    grid.appendChild(blank);
+  }
+
+  for(let day=1;day<=daysInMonth;day++){
+
+    const date =
+      makeDateString(year,month,day);
+
+    const events =
+      state.events.filter(
+        e => e.date === date
+      );
+
+    const button =
+      document.createElement("button");
+
+    button.type = "button";
+    button.className = "day";
+    button.textContent = day;
+
+    if(events.length){
+
+      button.classList.add("hasEvent");
+
+      const dot =
+        document.createElement("span");
+
+      dot.className = "eventDot";
+      button.appendChild(dot);
+    }
+
+    if(date === todayString()){
+      button.classList.add("today");
+    }
+
+    if(date === state.selectedDate){
+      button.classList.add("selected");
+    }
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        state.selectedDate = date;
+
+        renderCalendar();
+        renderSelectedDay(date);
+
+        setTimeout(
+          () => {
+            $("dayDetails").scrollIntoView({
+              behavior:"smooth",
+              block:"start"
+            });
+          },
+          50
+        );
+      }
+    );
+
+    grid.appendChild(button);
+  }
+
+  renderMonthList();
+
+  if(
+    state.selectedDate &&
+    state.selectedDate.startsWith(
+      year + "-" +
+      String(month+1).padStart(2,"0")
+    )
+  ){
+    renderSelectedDay(state.selectedDate);
+  }else{
+    $("dayDetails").innerHTML = "";
+  }
+}
+
+function renderSelectedDay(date){
+
+  const container = $("dayDetails");
+  container.innerHTML = "";
+
+  const title =
+    document.createElement("div");
+
+  title.className = "sectionTitle";
+  title.style.marginTop = "0";
+  title.textContent =
+    "PRESTACIONES · " + formatDate(date);
+
+  container.appendChild(title);
+
+  const events =
+    state.events
+      .filter(e => e.date === date)
+      .slice()
+      .sort(eventSort);
+
+  if(!events.length){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className = "empty";
+    empty.textContent =
+      "NO HAY PRESTACIONES ESTE DÍA.";
+
+    container.appendChild(empty);
+
+  }else{
+
+    events.forEach(e => {
+      container.appendChild(
+        createDetailCard(e)
+      );
     });
+  }
 
-    const monto = document.createElement("b");
-    monto.className = "gold";
-    monto.textContent = "$" + Number(e.amount || 0).toLocaleString("es-CL");
+  const add =
+    document.createElement("button");
 
-    fila.appendChild(boton);
-    fila.appendChild(monto);
-    contenedor.appendChild(fila);
+  add.type = "button";
+  add.className = "primary";
+  add.textContent =
+    "+ AGREGAR OTRA PRESTACIÓN";
+
+  add.addEventListener(
+    "click",
+    () => openForm(null,date)
+  );
+
+  container.appendChild(add);
+}
+
+function renderMonthList(){
+
+  const container = $("monthList");
+  container.innerHTML = "";
+
+  const prefix =
+    state.calendarYear + "-" +
+    String(
+      state.calendarMonth + 1
+    ).padStart(2,"0");
+
+  const events =
+    state.events
+      .filter(
+        e => e.date.startsWith(prefix)
+      )
+      .slice()
+      .sort(eventSort);
+
+  if(!events.length){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className = "empty";
+    empty.textContent =
+      "NO HAY PRESTACIONES ESTE MES.";
+
+    container.appendChild(empty);
+    return;
+  }
+
+  events.forEach(e => {
+    container.appendChild(
+      createEventCard(e)
+    );
   });
+}
 
-  const volver = document.createElement("button");
-  volver.type = "button";
-  volver.className = "primary";
-  volver.textContent = "← VOLVER AL RESUMEN";
+$("prevMonth").addEventListener(
+  "click",
+  function(){
 
-  volver.addEventListener("click", function () {
-    view("summary");
-  });
+    state.calendarMonth--;
 
-  contenedor.appendChild(volver);
-  contenedor.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-});  
+    if(state.calendarMonth < 0){
+      state.calendarMonth = 11;
+      state.calendarYear--;
+    }
+
+    state.selectedDate = "";
+    renderCalendar();
+  }
+);
+
+$("nextMonth").addEventListener(
+  "click",
+  function(){
+
+    state.calendarMonth++;
+
+    if(state.calendarMonth > 11){
+      state.calendarMonth = 0;
+      state.calendarYear++;
+    }
+
+    state.selectedDate = "";
+    renderCalendar();
+  }
+);
+
+/* =========================
+   RESUMEN
+========================= */
+
+function renderSummary(){
+
+  const paid =
+    state.events.filter(
+      e => e.payment === "Pagado"
+    );
+
+  const pending =
+    state.events.filter(
+      e => e.payment !== "Pagado"
+    );
+
+  const confirmed =
+    state.events.filter(
+      e => e.status === "Confirmado"
+    );
+
+  const replacements =
+    state.events.filter(
+      e => e.status === "Reemplazo"
+    );
+
+  const paidMoney =
+    paid.reduce(
+      (total,e) =>
+        total + Number(e.amount || 0),
+      0
+    );
+
+  const pendingMoney =
+    pending.reduce(
+      (total,e) =>
+        total + Number(e.amount || 0),
+      0
+    );
+
+  $("sumTotal").textContent =
+    state.events.length;
+
+  $("sumConfirmed").textContent =
+    confirmed.length;
+
+  $("sumReplace").textContent =
+    replacements.length;
+
+  $("sumPaid").textContent =
+    paid.length;
+
+  $("sumPending").textContent =
+    pending.length;
+
+  $("sumPaidMoney").textContent =
+    formatMoney(paidMoney);
+
+  $("sumPendingMoney").textContent =
+    formatMoney(pendingMoney);
+}
+
+function openPaymentList(type){
+
+  const isPaid = type === "paid";
+
+  const events =
+    state.events
+      .filter(
+        e =>
+          isPaid
+            ? e.payment === "Pagado"
+            : e.payment !== "Pagado"
+      )
+      .slice()
+      .sort(eventSort);
+
+  $("sheetTitle").textContent =
+    isPaid
+      ? "💰 PAGADAS"
+      : "⌛ PENDIENTES DE PAGO";
+
+  const content = $("sheetContent");
+  content.innerHTML = "";
+
+  if(!events.length){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className = "empty";
+
+    empty.textContent =
+      isPaid
+        ? "NO HAY PRESTACIONES PAGADAS."
+        : "NO HAY PAGOS PENDIENTES.";
+
+    content.appendChild(empty);
+
+  }else{
+
+    events.forEach(e => {
+      content.appendChild(
+        createDetailCard(e)
+      );
+    });
+  }
+
+  $("sheet").classList.add("open");
+}
+
+$("paidButton").addEventListener(
+  "click",
+  () => openPaymentList("paid")
+);
+
+$("pendingButton").addEventListener(
+  "click",
+  () => openPaymentList("pending")
+);
+
+/* =========================
+   PANEL
+========================= */
+
+function closeSheet(){
+  $("sheet").classList.remove("open");
+}
+
+$("closeSheet").addEventListener(
+  "click",
+  closeSheet
+);
+
+$("sheet").addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === $("sheet")){
+      closeSheet();
+    }
+  }
+);
+
+/* =========================
+   RESPALDO
+========================= */
+
+$("exportBackup").addEventListener(
+  "click",
+  function(){
+
+    const backup = {
+      app:"KICHAN AGENDA",
+      version:4,
+      createdAt:new Date().toISOString(),
+      events:state.events
+    };
+
+    const blob =
+      new Blob(
+        [
+          JSON.stringify(
+            backup,
+            null,
+            2
+          )
+        ],
+        {
+          type:"application/json"
+        }
+      );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement("a");
+
+    const date =
+      todayString().replaceAll("-","");
+
+    a.href = url;
+
+    a.download =
+      "kichan-agenda-respaldo-" +
+      date +
+      ".json";
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  }
+);
+
+$("restoreBackup").addEventListener(
+  "click",
+  function(){
+    $("backupFile").click();
+  }
+);
+
+$("backupFile").addEventListener(
+  "change",
+  function(){
+
+    const file = this.files &&
+      this.files[0];
+
+    if(!file){
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload = function(){
+
+      try{
+
+        const parsed =
+          JSON.parse(reader.result);
+
+        const arr =
+          extractArray(parsed);
+
+        if(!arr){
+          throw new Error(
+            "Formato no reconocido"
+          );
+        }
+
+        const restored =
+          arr
+            .filter(looksLikeEvent)
+            .map(normalizeEvent);
+
+        if(
+          !confirm(
+            "Se encontraron " +
+            restored.length +
+            " prestaciones.\n\n" +
+            "¿Restaurar este respaldo?"
+          )
+        ){
+          $("backupFile").value = "";
+          return;
+        }
+
+        state.events = restored;
+
+        saveEvents();
+        renderAll();
+
+        alert(
+          "Respaldo restaurado correctamente."
+        );
+
+      }catch(error){
+
+        alert(
+          "No se pudo restaurar este respaldo."
+        );
+      }
+
+      $("backupFile").value = "";
+    };
+
+    reader.readAsText(file);
+  }
+);
+
+/* =========================
+   RENDER GENERAL
+========================= */
+
+function renderAll(){
+  renderHome();
+  renderCalendar();
+  renderSummary();
+}
+
+/* =========================
+   INICIO
+========================= */
+
+state.events = loadEvents();
+
+renderAll();
+showView("home");
+
+/* SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener(
+    "load",
+    function(){
+
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch(function(){});
+    }
+  );
+}
 </script>
-</body></html>
+
+</body>
+</html>
