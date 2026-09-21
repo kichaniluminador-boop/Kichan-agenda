@@ -267,11 +267,11 @@
 </section>
 </main>
 
-<div id="actionSheet" class="action-sheet" aria-hidden="true">
-  <div class="action-sheet-panel">
+<div id="actionSheet" class="action-sheet" aria-hidden="true" onclick="closeActionSheet()">
+  <div class="action-sheet-panel" onclick="event.stopPropagation()">
     <div id="actionSheetTitle" class="action-sheet-title"></div>
     <div id="actionSheetButtons" class="action-sheet-buttons"></div>
-    <button id="actionSheetCancel" class="action-sheet-cancel" type="button">CANCELAR</button>
+    <button id="actionSheetCancel" class="action-sheet-cancel" type="button" onclick="closeActionSheet();return false;">CANCELAR</button>
   </div>
 </div>
 
@@ -367,8 +367,10 @@ function renderDetail(){
 }
 
 function closeActionSheet(){
- const sh=$("actionSheet");if(!sh)return;
+ const sh=$("actionSheet");if(!sh)return false;
  sh.classList.remove("show");sh.setAttribute("aria-hidden","true");
+ const box=$("actionSheetButtons");if(box)box.innerHTML="";
+ return false;
 }
 function chooseV18(title,options){
  $("actionSheetTitle").textContent=title;
