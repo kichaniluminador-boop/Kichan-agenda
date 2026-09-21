@@ -353,25 +353,26 @@ $("backupFile").addEventListener("change", function(){
 }); 
 save();
 render();
-$("pendientesPago").addEventListener("click", function(){
-  
-  const lista = events.filter(e => e.payment !== "Pagado");
+$("pendientesPago").addEventListener("click", function () {
+  const lista = events
+    .filter(e => e.payment !== "Pagado")
+    .slice()
+    .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
 
   if (!lista.length) {
     alert("NO HAY PRESTACIONES PENDIENTES DE PAGO");
     return;
   }
-$("m1").innerHTML = "";
 
-const tituloPendientes = document.createElement("div");
-tituloPendientes.className = "section";
-tituloPendientes.textContent = "⏳ PENDIENTES DE PAGO";
-$("m1").appendChild(tituloPendientes);
+  const contenedor = $("m1");
+  contenedor.innerHTML = "";
 
-lista
-  .slice()
-  .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
-  .forEach(e => {
+  const titulo = document.createElement("div");
+  titulo.className = "section";
+  titulo.textContent = "⌛ PENDIENTES DE PAGO";
+  contenedor.appendChild(titulo);
+
+  lista.forEach(e => {
     const fila = document.createElement("div");
     fila.className = "line";
 
@@ -390,22 +391,23 @@ lista
 
     fila.appendChild(boton);
     fila.appendChild(monto);
-    $("m1").appendChild(fila);
+    contenedor.appendChild(fila);
   });
 
-const volver = document.createElement("button");
-volver.type = "button";
-volver.className = "primary";
-volver.textContent = "← VOLVER AL RESUMEN";
+  const volver = document.createElement("button");
+  volver.type = "button";
+  volver.className = "primary";
+  volver.textContent = "← VOLVER AL RESUMEN";
 
-volver.addEventListener("click", function () {
-  view("summary");
-});
+  volver.addEventListener("click", function () {
+    view("summary");
+  });
 
-$("m1").appendChild(volver);
-  
-
-  $("ml").scrollIntoView({behavior:"smooth", block:"start"});
+  contenedor.appendChild(volver);
+  contenedor.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 });  
 </script>
 </body></html>
